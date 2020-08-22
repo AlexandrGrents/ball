@@ -129,6 +129,7 @@ function addRandomBall()
 
 function changeCanvasGeomenryOnEvent(event)
 {
+	if (event.pageX < (4*r) || event.pageY < (4*r)) return;
 	canvas.width = event.pageX;
 	canvas.height = event.pageY;
 	ctx.w = event.pageX;
