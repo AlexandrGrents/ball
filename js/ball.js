@@ -24,11 +24,16 @@ class Ball
 
 		this.type = 'ball'
 	}
-	defineRandomDiraction()
+	getRandomPos()
 	{
 		let x = Math.random()*this.app.w;
 		let y = Math.random()*this.app.h;
-		this.changeDiractionFor({x,y});
+		return {x, y}
+	}
+	defineRandomDiraction()
+	{
+		let pos = this.getRandomPos();
+		this.changeDiractionFor(pos);
 	}
 	changeDiractionFor(pos)
 	{
@@ -85,11 +90,11 @@ class Ball
 	    this.app.ctx.fillStyle = '#000000';
 	    if (this.power)
 	    {
-	    	this.app.ctx.fillText(this.power, this.x - 12, this.y + 5);
+	    	this.app.ctx.fillText(Math.floor(this.power), this.x - 12, this.y + 5);
 	    }
 	    else if (this.sustenance)
 	    {
-	    	this.app.ctx.fillText(this.sustenance, this.x - 12, this.y + 5);
+	    	this.app.ctx.fillText(Math.floor(this.sustenance), this.x - 12, this.y + 5);
 	    }
 	    
 	    this.app.ctx.closePath();

@@ -27,8 +27,9 @@ let totalTimeLabel = document.getElementById('total-time');
 let app = new Application({canvas, sectors: {x:20, y: 20}, showSectors: showSectors.checked, reproductionMode: reproductionMode.checked});
 globalThis.app = app;
 
-// app.addElems('tree', 30);
-app.addElems('gatherer',3);
+app.addElems('tree', 50);
+app.addElems('gatherer',6);
+app.addElems('hunter',1);
 
 let mspf = Math.floor(1000/parseInt(speedSelect.value));
 let timeForAddTrees = Math.floor(200*mspf/1000);

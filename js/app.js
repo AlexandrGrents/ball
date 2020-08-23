@@ -93,6 +93,7 @@ class Application
 		let ball;
 		for (let pos of positions)
 		{
+			if (pos.x < 10 || pos.y < 10 || pos.x > (this.w - 10) || pos.y > (this.h - 10)) continue;
 			switch (type)
 			{
 				case 'tree':

@@ -6,16 +6,19 @@ class Hunter extends Ball
 	static foodType = new Set(['gatherer', 'corpse']);
 	constructor(options)
 	{
-		super({app: options.app, pos: options.pos, r: 30, speed: 6, color: '#ab0000'});
+		super({app: options.app, pos: options.pos, r: 30, speed: 7, color: '#ab0000'});
 		this.power = 400;
 		this.type = 'hunter';
 		this.probably = 0.02;
 		this.powerForReproduction = 300;
+		this.powerForMove = 1
+		this.age = 0;
 	}
 	move()
 	{
-		if (this.power <=0 || Math.random()<(0.01/this.power)) return this.dead();
-		this.power -=1;
+		this.age++;
+		if (this.power <=0 || Math.random()<(0.001*this.age/(10*this.power))) return this.dead();
+		this.power -=this.powerForMove;
 		if (Math.random() < this.probably) this.defineRandomDiraction();
 		if (this.power > 2 * this.powerForReproduction && this.app.reproductionMode) this.reproduction();
 		this.find();
@@ -48,7 +51,7 @@ class Hunter extends Ball
 	}
 	eat(food)
 	{
-		this.power = food.sustenance ? this.power + food.sustenance: 200 + Math.floor(food.power / 2);
+		this.power = food.sustenance ? this.power + food.sustenance: this.power + 100 + Math.floor(food.power / 4);
 		food.delete();
 		this.defineRandomDiraction();
 	}

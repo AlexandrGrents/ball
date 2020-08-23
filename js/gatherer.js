@@ -10,12 +10,15 @@ class Gatherer extends Ball
 		this.power = 100;
 		this.type = 'gatherer';
 		this.probably = 0.02;
-		this.powerForReproduction = 400;
+		this.powerForReproduction = 150;
+		this.powerForMove = 1;
+		this.age = 0;
 	}
 	move()
 	{
-		if (this.power <=0 || Math.random()<(0.01/this.power)) return this.dead();
-		this.power -=1;
+		this.age++;
+		if (this.power <=0 || Math.random()<(0.001*this.age/(10*this.power))) return this.dead();
+		this.power -= this.powerForMove;
 		if (Math.random() < this.probably) this.defineRandomDiraction();
 		if (this.power > 2 * this.powerForReproduction && this.app.reproductionMode) this.reproduction();
 		this.find();
