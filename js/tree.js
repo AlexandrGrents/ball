@@ -4,9 +4,9 @@ class Tree extends  Ball
 {
 	constructor(options)
 	{
-		super({app: options.app, pos: options.pos, r: 15, diraction: {dx:0, dy:0}, color: '#00ff00'});
-		this.canMove = false;
+		super({app: options.app, pos: options.pos, r: 15, speed:0, color: '#00ff00'});
 		this.type = 'tree';
+		this.sustenance = 100;
 	}
 }
 export default Tree

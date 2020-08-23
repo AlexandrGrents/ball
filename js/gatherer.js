@@ -1,4 +1,5 @@
 import Ball from './ball.js'
+import Corpse from './corpse.js'
 
 class Gatherer extends Ball
 {
@@ -12,7 +13,7 @@ class Gatherer extends Ball
 	}
 	move()
 	{
-		if (this.power <=0) return;
+		if (this.power <=0 || Math.random()<(0.01/this.power)) return this.dead();
 		this.power -=1;
 		if (Math.random() < this.probably) this.defineRandomDiraction();
 		this.find();
@@ -21,10 +22,9 @@ class Gatherer extends Ball
 	find()
 	{
 		let trees = new Set();
-		console.log(this.sector, this.app.sectors.get(this.sector));
 		for (let ball of this.app.sectors.get(this.sector).values())
 		{
-			if (ball.type === 'tree')
+			if (ball.type === 'tree' || ball.type === 'corpse')
 			{
 
 				if (Math.abs(this.x - ball.x) <5 && Math.abs(this.y - ball.y) < 5)
@@ -40,7 +40,6 @@ class Gatherer extends Ball
 		let nearestTree, minDist = null, dist;
 		for (let tree of trees.values())
 		{
-			console.log(tree)
 			dist = this.calcDistFor({x:tree.x, y: tree.y})
 			if (minDist === null || minDist > dist)
 			{
@@ -50,15 +49,20 @@ class Gatherer extends Ball
 		}
 		if (minDist !== null) this.changeDiractionFor({x:nearestTree.x, y:nearestTree.y});
 	}
-	eat(tree)
+	eat(food)
 	{
-		this.app.sectors.get(tree.sector).delete(tree);
-		this.app.balls.delete(tree);
-		this.power += 100;
-		console.log('eat', this.power);
+		this.app.sectors.get(food.sector).delete(food);
+		this.app.balls.delete(food);
+		this.power += food.sustenance;
 		this.defineRandomDiraction();
 	}
-	
+	dead()
+	{
+		this.app.balls.add( new Corpse(this));
+		this.app.sectors.get(this.sector).delete(this);
+		this.app.balls.delete(this);
+		this.app.gatherers.delete(this);
+	}
 
 }
 

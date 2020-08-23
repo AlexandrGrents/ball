@@ -12,6 +12,7 @@ class Application
 		this.scoreLabel = options.scoreLabel;
 		console.log(this.canvas);
 		this.ctx = this.canvas.getContext('2d');
+		this.ctx.font = "12px Verdana";
 		this.w = parseInt(this.canvas.width);
 		this.h = parseInt(this.canvas.height);
 
@@ -29,7 +30,7 @@ class Application
 
 		// this.addForest([{x:250, y:150}, {x:250, y:250}, {x:450, y:100}, {x:300, y:180}]);
 		this.addRandomForest(30);
-		this.addGatherer({x:140, y:100}, {dx:1, dy:3})
+		for (let i =0; i<5; i++) this.addGatherer({x:100 + 40* i, y:100 + 20* i}); 
 		// this.addHunter({x:250, y:300}, {dx:1, dy:1})
 
 	}
@@ -37,9 +38,9 @@ class Application
 	{
 		this.balls.add(new Ball({app: this, pos: options.pos, r: this.r, diraction: options.diraction}));
 	}
-	addGatherer(pos, diraction)
+	addGatherer(pos)
 	{
-		let gatherer = new Gatherer({app: this, pos, diraction})
+		let gatherer = new Gatherer({app: this, pos})
 		this.balls.add(gatherer)
 		this.gatherers.add(gatherer)
 	}
@@ -103,17 +104,19 @@ class Application
 
 	render()
 	{	
+		let sumPower = 0;
 		this.movingBalls();
 		this.ctx.clearRect(0, 0, this.w, this.h);
 		this.renderSectors();
-		for (let ball of this.balls.values())
+		for (let ball of [...this.balls].sort(Ball.compareFunction))
 		{
 			ball.draw();
 			if (ball.type === 'gatherer')
 			{
-				this.scoreLabel.innerText = ball.power;
+				sumPower += ball.power;
 			}
 		}
+		this.scoreLabel.innerText = sumPower;
 
 	}
 	stopRender()
@@ -125,9 +128,7 @@ class Application
 		if (sector === ball.sector) return;
 		
 		this.sectors.get(ball.sector).delete(ball);
-		this.sectors.get(sector).add(ball);
-		console.log('change');
-		
+		this.sectors.get(sector).add(ball);		
 	}
 }
 

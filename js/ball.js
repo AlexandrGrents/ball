@@ -22,14 +22,14 @@ class Ball
 		
 
 		this.sector = this.defineSector();
-		console.log(this.app.sectors);
 		this.app.sectors.get(this.sector).add(this);
+
+		this.type = 'ball'
 	}
 	defineRandomDiraction()
 	{
 		let x = Math.random()*this.app.w;
 		let y = Math.random()*this.app.h;
-		console.log('for', {x, y})
 		this.changeDiractionFor({x,y});
 	}
 	changeDiractionFor(pos)
@@ -84,12 +84,40 @@ class Ball
 	    this.app.ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
 	    this.app.ctx.fillStyle = this.color;
 	    this.app.ctx.fill();
+	    this.app.ctx.fillStyle = '#000000';
+	    if (this.power)
+	    {
+	    	this.app.ctx.fillText(this.power, this.x - 12, this.y + 5);
+	    }
+	    else if (this.sustenance)
+	    {
+	    	this.app.ctx.fillText(this.sustenance, this.x - 12, this.y + 5);
+	    }
+	    
+
+	    
 	    this.app.ctx.closePath();
 	}
 	delete()
 	{
 		this.app.sectors.get(sector).delete(this);
 		this.app.balls.delete(this);
+	}
+
+	static compareFunction(ball1, ball2)
+	{
+		if (ball1.type ===ball2.type) return 0;
+		if (ball1.type ==='ball') return -1;
+		if (ball2.type === 'ball') return 1;
+		
+		if (ball1.type ==='tree') return -1;
+		if (ball2.type === 'tree') return 1;
+
+		if (ball1.type === 'corpse') return -1;
+		if (ball2.type === 'corpse') return 1;
+
+		if (ball1.type === 'gatherer') return -1;
+		if (ball2.type === 'gatherer') return 1;
 	}
 }
 

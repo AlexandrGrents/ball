@@ -11,12 +11,12 @@
 	<hr>
 	<canvas id="сanvas" width="780" height="520"></canvas>
 	<p>Всего энергии: <span id="score"></span></p>
-	<p>До обновления леса: <span id="timer">20</span></p>
+	<p>До обновления леса: <span id="timer">20</span> из <span id="total-time">20</span></p>
 	<select id="speed">
-		<option selected value="1">1 fps</option>
-		<option value="10">10 fps</option>
-		<option value="30">30 fps</option>
-		<option value="60">60 fps</option>
+		<option value="1">1 fps</option>
+		<option selected value="10">10 fps</option>
+		<option value="25">25 fps</option>
+		<option value="50">50 fps</option>
 		<option value="100">100 fps</option>
 		<option value="200">200 fps</option>
 	</select>
@@ -28,7 +28,9 @@
 		<option value="40">40 деревьев</option>
 		<option value="50">50 деревьев</option>
 	</select>
-	<button id="add-power">Подать на пропитание</button>
+	<button id="add-power">Подать всем на пропитание</button>
+	<button id="add-gatherer">Добавить собирателя</button>
+	<button id="pause">Пауза</button>
 	<hr>
 	<script type="module" src="js/script.js"></script>
 </body>
