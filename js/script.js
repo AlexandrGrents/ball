@@ -13,7 +13,8 @@ let pause = document.getElementById('pause');
 let addPower = document.getElementById('add-power');
 let addGatherer = document.getElementById('add-gatherer');
 
-let showSectors = document.getElementById('show-sectors')
+let showSectors = document.getElementById('show-sectors');
+let reproductionMode = document.getElementById('reproduction-mode');
 
 let speedSelect = document.getElementById('speed');
 let forestSelect = document.getElementById('forest');
@@ -21,10 +22,10 @@ let forestSelect = document.getElementById('forest');
 let timeLabel = document.getElementById('timer');
 let totalTimeLabel = document.getElementById('total-time');
 
-let app = new Application({canvas, sectors: {x:20, y: 20}, showSectors: showSectors.checked});
+let app = new Application({canvas, sectors: {x:20, y: 20}, showSectors: showSectors.checked, reproductionMode: reproductionMode.checked});
 globalThis.app = app;
 
-app.addElems('tree', 30);
+// app.addElems('tree', 30);
 app.addElems('gatherer',3);
 
 let mspf = Math.floor(1000/parseInt(speedSelect.value));
@@ -40,6 +41,7 @@ pause.onclick = (event) => {pauseActive = !pauseActive; event.target.innerText =
 addPower.onclick = () => {app.addPower('gatherer'); app.render();};
 addGatherer.onclick = () => {app.addElems('gatherer', 1); app.render();}; 
 showSectors.onclick = (event) => {app.showSectors = event.target.checked; app.render();};
+reproductionMode.onclick = (event) => {app.reproductionMode = event.target.checked; app.render();};
 timeLabel.change = function(){if (!pauseActive) {this.innerText = i; i = (timeForAddTrees + i - 1) % timeForAddTrees}};
 totalTimeLabel.change = function(){if (!pauseActive) {this.innerText = timeForAddTrees}};
 speedSelect.onchange = (event) =>

@@ -93,8 +93,6 @@ class Ball
 	    	this.app.ctx.fillText(this.sustenance, this.x - 12, this.y + 5);
 	    }
 	    
-
-	    
 	    this.app.ctx.closePath();
 	}
 	delete()

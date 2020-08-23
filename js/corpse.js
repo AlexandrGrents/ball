@@ -10,6 +10,18 @@ class Corpse extends Ball
 		this.type = 'corpse';
 		this.sustenance = deadAnimal.type === 'gatherer' ? 100 : 200;
 		this.sustenance += Math.floor(deadAnimal.power / 2);
+		this.sustenanceForFrame = 1;
+	}
+	move()
+	{
+		if (this.sustenance <= 0 ) return this.delete();
+		this.sustenance-= this.sustenanceForFrame;
+		super.move();
+	}
+	delete()
+	{
+		this.sustenance = 0;
+		super.delete();
 	}
 }
 

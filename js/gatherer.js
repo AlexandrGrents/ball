@@ -10,58 +10,63 @@ class Gatherer extends Ball
 		this.power = 100;
 		this.type = 'gatherer';
 		this.probably = 0.02;
+		this.powerForReproduction = 400;
 	}
 	move()
 	{
 		if (this.power <=0 || Math.random()<(0.01/this.power)) return this.dead();
 		this.power -=1;
 		if (Math.random() < this.probably) this.defineRandomDiraction();
+		if (this.power > 2 * this.powerForReproduction && this.app.reproductionMode) this.reproduction();
 		this.find();
 		super.move();
 	}
+	reproduction()
+	{
+		this.power -= this.powerForReproduction;
+		this.app.addElems(this.type, 1, [{x: this.x, y:this.y}]);
+
+	}
 	find()
 	{
-		let trees = new Set();
-		for (let ball of this.app.sectors.get(this.sector).values())
+		let foods = new Set();
+		for (let ball of this.app.sectors.get(this.sector))
 		{
 			if (ball.type === 'tree' || ball.type === 'corpse')
 			{
-
+				
 				if (Math.abs(this.x - ball.x) <5 && Math.abs(this.y - ball.y) < 5)
 				{
 					this.eat(ball);
 				}
 				else
 				{
-					trees.add(ball);
+					foods.add(ball);
 				}
 			}	
 		}
-		let nearestTree, minDist = null, dist;
-		for (let tree of trees.values())
+		let nearestFood, minDist = null, dist;
+		for (let food of foods)
 		{
-			dist = this.calcDistFor({x:tree.x, y: tree.y})
+			dist = this.calcDistFor({x:food.x, y: food.y})
 			if (minDist === null || minDist > dist)
 			{
 				minDist = dist;
-				nearestTree = tree;
+				nearestFood = food;
 			}
 		}
-		if (minDist !== null) this.changeDiractionFor({x:nearestTree.x, y:nearestTree.y});
+		if (minDist !== null) this.changeDiractionFor({x:nearestFood.x, y:nearestFood.y});
 	}
 	eat(food)
 	{
-		this.app.sectors.get(food.sector).delete(food);
-		this.app.balls.delete(food);
 		this.power += food.sustenance;
+		food.delete();
 		this.defineRandomDiraction();
 	}
 	dead()
 	{
-		this.app.balls.add( new Corpse(this));
-		this.app.sectors.get(this.sector).delete(this);
-		this.app.balls.delete(this);
-		this.app.gatherers.delete(this);
+		this.app.register(new Corpse(this));
+		this.delete();
 	}
 
 }

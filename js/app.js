@@ -26,10 +26,12 @@ class Application
 		this.gatherers = new Set();
 		this.trees = new Set();
 		this.hunters = new Set();
+		this.corpses = new Set();
 
 		this.sectors = new Map();
 		for (let i =0; i<this.perX * this.perY; i++) this.sectors.set(i,new Set());
-		this.showSectors = options.showSectors? options.showSectors: false;
+		this.showSectors = options.showSectors ? options.showSectors: false;
+		this.reproductionMode = options.reproductionMode ? options.reproductionMode: false;
 	}
 	
 	register(ball)
@@ -45,14 +47,18 @@ class Application
 				this.gatherers.add(ball);
 				break;
 			case 'hunters':
-				this.hunters.add(ball)
+				this.hunters.add(ball);
+				break;
+			case 'corpse':
+				this.corpses.add(ball);
+				break;
 		}
 	}
 
 	unregister(ball)
 	{
 		this.balls.delete(ball);
-		this.sectors.delete(ball.sector).add(ball);
+		this.sectors.get(ball.sector).delete(ball);
 		switch (ball.type)
 		{
 			case 'tree':
@@ -63,6 +69,9 @@ class Application
 				break;
 			case 'hunters':
 				this.hunters.delete(ball)
+			case 'corpse':
+				this.corpses.delete(ball);
+				break;
 		}
 	}
 
@@ -78,9 +87,9 @@ class Application
 		return positions;
 	}
 
-	addElems(type, n)
+	addElems(type, n, poss = null)
 	{
-		let positions = this.getRandomPositions(n);
+		let positions = poss ? poss: this.getRandomPositions(n);
 		let ball;
 		for (let pos of positions)
 		{
@@ -102,7 +111,7 @@ class Application
 	
 	movingBalls()
 	{
-		for (let ball of this.balls.values()) ball.move()
+		for (let ball of this.balls) ball.move()
 	}
 	renderSectors()
 	{
