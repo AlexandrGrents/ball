@@ -4,17 +4,32 @@
 	<meta charset="UTF-8">
 	<title>Крутящийся шарик</title>
 	<link rel="stylesheet" href="style.css">
+	<link rel="shortcut icon" href="favicon.ico" type="image/ico">
 </head>
 <body>
 	<a href="https://github.com/AlexandrGrents/ball"><button>GitHub</button></a>
 	<hr>
-	<canvas id="сanvas" width="480" height="320"></canvas>
+	<canvas id="сanvas" width="780" height="520"></canvas>
+	<p>Всего энергии: <span id="score"></span></p>
+	<p>До обновления леса: <span id="timer">20</span></p>
+	<select id="speed">
+		<option selected value="1">1 fps</option>
+		<option value="10">10 fps</option>
+		<option value="30">30 fps</option>
+		<option value="60">60 fps</option>
+		<option value="100">100 fps</option>
+		<option value="200">200 fps</option>
+	</select>
+	<select id="forest">
+		<option value="0">0 деревьев</option>
+		<option value="10">10 деревьев</option>
+		<option value="20">20 деревьев</option>
+		<option selected value="30">30 деревьев</option>
+		<option value="40">40 деревьев</option>
+		<option value="50">50 деревьев</option>
+	</select>
+	<button id="add-power">Подать на пропитание</button>
 	<hr>
-	<button id="add">Добавить</button>
-	<button id="addx5">Добавить (x5)</button>
-	<button id="clear">Отчистить</button>
-	<button id="standart-geometry">Вернуть к обычным размерам</button>
-	<button id="following-mode" class="deactive">Включить мод "преследования мыши"</button>
-	<script src="script.js"></script>
+	<script type="module" src="js/script.js"></script>
 </body>
 </html>
