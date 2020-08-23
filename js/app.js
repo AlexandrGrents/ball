@@ -101,7 +101,7 @@ class Application
 				case 'gatherer':
 					ball = new Gatherer({app: this, pos});
 					break;
-				case 'hunters':
+				case 'hunter':
 					ball = new Hunter({app: this, pos});
 					break;
 			}

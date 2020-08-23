@@ -20,7 +20,6 @@ class Ball
 
 		this.color = (options.color) ? options.color : colors[2];
 		
-
 		this.sector = this.defineSector();
 
 		this.type = 'ball'

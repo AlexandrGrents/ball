@@ -3,10 +3,10 @@ import Corpse from './corpse.js'
 
 class Gatherer extends Ball
 {
+	static foodType = new Set(['tree']);
 	constructor(options)
 	{
 		super({app: options.app, pos: options.pos, r: 20, speed: 5, color: '#0095DD'});
-		this.canMove = true;
 		this.power = 100;
 		this.type = 'gatherer';
 		this.probably = 0.02;
@@ -32,28 +32,17 @@ class Gatherer extends Ball
 		let foods = new Set();
 		for (let ball of this.app.sectors.get(this.sector))
 		{
-			if (ball.type === 'tree' || ball.type === 'corpse')
+			if (Gatherer.foodType.has(ball.type))
 			{
-				
-				if (Math.abs(this.x - ball.x) <5 && Math.abs(this.y - ball.y) < 5)
-				{
-					this.eat(ball);
-				}
-				else
-				{
-					foods.add(ball);
-				}
+				if (Math.abs(this.x - ball.x) <5 && Math.abs(this.y - ball.y) < 5) this.eat(ball);
+				else foods.add(ball);
 			}	
 		}
 		let nearestFood, minDist = null, dist;
 		for (let food of foods)
 		{
 			dist = this.calcDistFor({x:food.x, y: food.y})
-			if (minDist === null || minDist > dist)
-			{
-				minDist = dist;
-				nearestFood = food;
-			}
+			if (minDist === null || minDist > dist) { minDist = dist; nearestFood = food; }
 		}
 		if (minDist !== null) this.changeDiractionFor({x:nearestFood.x, y:nearestFood.y});
 	}

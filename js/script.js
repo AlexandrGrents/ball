@@ -12,6 +12,8 @@ let pauseActive = false;
 let pause = document.getElementById('pause');
 let addPower = document.getElementById('add-power');
 let addGatherer = document.getElementById('add-gatherer');
+let addHunter = document.getElementById('add-hunter');
+
 
 let showSectors = document.getElementById('show-sectors');
 let reproductionMode = document.getElementById('reproduction-mode');
@@ -39,7 +41,8 @@ let timerId = setInterval(() => timeLabel.change(), 1000);
 
 pause.onclick = (event) => {pauseActive = !pauseActive; event.target.innerText = pauseActive ? 'Подолжить' : 'Пауза'};
 addPower.onclick = () => {app.addPower('gatherer'); app.render();};
-addGatherer.onclick = () => {app.addElems('gatherer', 1); app.render();}; 
+addGatherer.onclick = () => {app.addElems('gatherer', 1); app.render();};
+addHunter.onclick = () => {app.addElems('hunter', 1); app.render();};
 showSectors.onclick = (event) => {app.showSectors = event.target.checked; app.render();};
 reproductionMode.onclick = (event) => {app.reproductionMode = event.target.checked; app.render();};
 timeLabel.change = function(){if (!pauseActive) {this.innerText = i; i = (timeForAddTrees + i - 1) % timeForAddTrees}};
