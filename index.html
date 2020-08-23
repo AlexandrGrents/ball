@@ -2,36 +2,60 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Крутящийся шарик</title>
+	<title>Имитация эволюции</title>
 	<link rel="stylesheet" href="style.css">
 	<link rel="shortcut icon" href="favicon.ico" type="image/ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<a href="https://github.com/AlexandrGrents/ball"><button>GitHub</button></a>
-	<hr>
-	<canvas id="сanvas" width="780" height="520"></canvas>
-	<p>Всего энергии: <span id="score"></span></p>
-	<p>До обновления леса: <span id="timer">20</span> из <span id="total-time">20</span></p>
-	<select id="speed">
-		<option value="1">1 fps</option>
-		<option selected value="10">10 fps</option>
-		<option value="25">25 fps</option>
-		<option value="50">50 fps</option>
-		<option value="100">100 fps</option>
-		<option value="200">200 fps</option>
-	</select>
-	<select id="forest">
-		<option value="0">0 деревьев</option>
-		<option value="10">10 деревьев</option>
-		<option value="20">20 деревьев</option>
-		<option selected value="30">30 деревьев</option>
-		<option value="40">40 деревьев</option>
-		<option value="50">50 деревьев</option>
-	</select>
-	<button id="add-power">Подать всем на пропитание</button>
-	<button id="add-gatherer">Добавить собирателя</button>
-	<button id="pause">Пауза</button>
-	<hr>
+	<header>
+		<h4><a href="https://github.com/AlexandrGrents/ball"><img id="github" src="github.svg">GitHub</a></h4>
+	</header>
+	<main>
+		<canvas id="сanvas" width="780" height="520"></canvas>
+		<div id="settings">
+			<button id="controls-show"><img src="cog-solid.svg"></button>
+			<button id="info-show"><img src="info-circle-solid.svg"></button>
+		</div>
+	</main>
+	<section id="controls" hidden>
+		<p>До обновления леса: <span id="timer"></span> из <span id="total-time"></span></p>
+		<select id="speed">
+			<option value="1">1 fps</option>
+			<option value="10">10 fps</option>
+			<option selected value="25">25 fps</option>
+			<option value="50">50 fps</option>
+			<option value="100">100 fps</option>
+			<option value="200">200 fps</option>
+		</select>
+		<select id="forest">
+			<option value="0">0 деревьев</option>
+			<option value="5">5 деревьев</option>
+			<option selected value="10">10 деревьев</option>
+			<option value="20">20 деревьев</option>
+			<option value="30">30 деревьев</option>
+			<option value="40">40 деревьев</option>
+			<option value="50">50 деревьев</option>
+		</select>
+		<button id="add-power">Подать всем на пропитание</button>
+		<button id="add-gatherer">Добавить собирателя</button>
+		<button id="pause">Пауза</button>
+		<input type="checkbox" id="show-sectors" name="show-sectors">
+		<label for="show-sectors">Показать секторы</label>
+	</section>
+	<section id="info" hidden>
+		<h4>Коротко</h4>
+		<p>Создаётся <b>собиратель</b> (синий шарик), а также несколько <b>растений</b> (зеленые шарики)</p>
+		<p>Собиратель видит растения, если они с ним в одном секторе (маленькие прямоугольник). Если он видит растения, он передвигается в их сторону, иначе он двигается как прежде, с небольшим шансом поменять свою траекторию в случайном направлении Когда собиратель ест растение, у него прибавляется энергия. Когда собиратель двигается в поисках растения, он теряет энергию. Растения появляеются в определённом количестве каждые 20 секунд.</p>
+
+		<h4>Функции</h4>
+		<ul>
+			<li>Можно менять скорость собирателя</li>
+			<li>Можно установить количество новых растений</li>
+			<li>Можно добавить собирателю 100 единиц энергии</li>
+		</ul>
+	</section>
+	
 	<script type="module" src="js/script.js"></script>
 </body>
 </html>

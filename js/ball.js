@@ -22,7 +22,6 @@ class Ball
 		
 
 		this.sector = this.defineSector();
-		this.app.sectors.get(this.sector).add(this);
 
 		this.type = 'ball'
 	}
@@ -100,8 +99,7 @@ class Ball
 	}
 	delete()
 	{
-		this.app.sectors.get(sector).delete(this);
-		this.app.balls.delete(this);
+		this.app.unregister(this);
 	}
 
 	static compareFunction(ball1, ball2)

@@ -1,56 +1,58 @@
 import Application from './app.js';
 
-let fps = parseInt(document.getElementById('speed').value);
-let pauseActive = false;
-let secForForest = Math.floor(200/fps);
-let i = secForForest;
+let canvas = document.getElementById('сanvas');
 
-let app = new Application({canvas: document.getElementById('сanvas'), scoreLabel: document.getElementById('score')});
+let controlsSection = document.getElementById('controls');
+let infoSection = document.getElementById('info');
+
+document.getElementById('controls-show').onclick = () => controlsSection.hidden = !controlsSection.hidden
+document.getElementById('info-show').onclick = () => infoSection.hidden = !infoSection.hidden
+
+let pauseActive = false;
+let pause = document.getElementById('pause');
+let addPower = document.getElementById('add-power');
+let addGatherer = document.getElementById('add-gatherer');
+
+let showSectors = document.getElementById('show-sectors')
+
+let speedSelect = document.getElementById('speed');
+let forestSelect = document.getElementById('forest');
+
+let timeLabel = document.getElementById('timer');
+let totalTimeLabel = document.getElementById('total-time');
+
+let app = new Application({canvas, sectors: {x:20, y: 20}, showSectors: showSectors.checked});
 globalThis.app = app;
 
-let forestProcId = setInterval( () => {
-	let newTreeCount = document.getElementById('forest').value;
-	app.addRandomForest(newTreeCount);
-	i = secForForest;
-}, 1000 * secForForest);
+app.addElems('tree', 30);
+app.addElems('gatherer',3);
 
+let mspf = Math.floor(1000/parseInt(speedSelect.value));
+let timeForAddTrees = Math.floor(200*mspf/1000);
+let i = timeForAddTrees;
+let newTreeCount = parseInt(forestSelect.value);
 
-let procId = setInterval(() => {if (!pauseActive) app.render()}, Math.floor(1000/fps))
+let renderId = setInterval(() => {if (!pauseActive) app.update()}, mspf)
+let addTreesId = setInterval(() => {if (!pauseActive) app.addElems('tree', newTreeCount)}, mspf*200)
+let timerId = setInterval(() => timeLabel.change(), 1000);
 
-document.getElementById('speed').onchange = (event) =>
+pause.onclick = (event) => {pauseActive = !pauseActive; event.target.innerText = pauseActive ? 'Подолжить' : 'Пауза'};
+addPower.onclick = () => {app.addPower('gatherer'); app.render();};
+addGatherer.onclick = () => {app.addElems('gatherer', 1); app.render();}; 
+showSectors.onclick = (event) => {app.showSectors = event.target.checked; app.render();};
+timeLabel.change = function(){if (!pauseActive) {this.innerText = i; i = (timeForAddTrees + i - 1) % timeForAddTrees}};
+totalTimeLabel.change = function(){if (!pauseActive) {this.innerText = timeForAddTrees}};
+speedSelect.onchange = (event) =>
 {
-	clearInterval(procId);
-	clearInterval(forestProcId);
-	fps = parseInt(event.target.value);
-	secForForest = Math.floor(200/fps);
-
-	document.getElementById('total-time').innerText = secForForest;
-
-	procId = setInterval(() => {if (!pauseActive) app.render()}, Math.floor(1000/fps))
-	forestProcId = setInterval( () => {
-		let newTreeCount = document.getElementById('forest').value;
-		app.addRandomForest(newTreeCount);
-		i = secForForest;
-	}, 1000 * secForForest);
+	clearInterval(renderId);
+	clearInterval(addTreesId);
+	mspf = Math.floor(1000/parseInt(event.target.value));
+	timeForAddTrees = Math.floor(200*mspf/1000);
+	timeLabel.change();
+	totalTimeLabel.change();
+	renderId = setInterval(() => {if (!pauseActive) app.update()}, mspf)
+	addTreesId = setInterval(() => {if (!pauseActive) app.addElems('tree', newTreeCount)}, mspf*200)
 }
-
-document.getElementById('add-power').onclick = () =>
-{
-	for (let gatherer of app.gatherers) gatherer.power += 100;
-}
-
-document.getElementById('add-gatherer').onclick = () =>
-{
-	app.addGatherer({x:100, y: 100});
-}
-
-document.getElementById('pause').onclick = () => 
-{
-	pauseActive = !pauseActive;
-	document.getElementById('pause').innerText = pauseActive ? 'Подолжить' : 'Пауза'
-}
-
-setInterval( () => {
-	document.getElementById('timer').innerText = i; 
-	i = (secForForest + i - 1) % secForForest
-}, 1000);
+forestSelect.onchange = (event) => newTreeCount = parseInt(event.target.value)
+timeLabel.change();
+totalTimeLabel.change();

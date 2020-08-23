@@ -9,75 +9,97 @@ class Application
 	{
 
 		this.canvas = options.canvas;
-		this.scoreLabel = options.scoreLabel;
-		console.log(this.canvas);
+
 		this.ctx = this.canvas.getContext('2d');
 		this.ctx.font = "12px Verdana";
 		this.w = parseInt(this.canvas.width);
 		this.h = parseInt(this.canvas.height);
 
-		this.perX = 5;
-		this.perY = 5;
+
+		this.perX = (options.sectors && options.sectors.x) ? options.sectors.x : 5;
+		this.perY = (options.sectors && options.sectors.y) ? options.sectors.y : 5;
 
 		this.r = 20;
 		this.probably = 0.2;
 		this.balls = new Set();
+
 		this.gatherers = new Set();
+		this.trees = new Set();
+		this.hunters = new Set();
 
 		this.sectors = new Map();
 		for (let i =0; i<this.perX * this.perY; i++) this.sectors.set(i,new Set());
-		console.log('map',this.sectors);
+		this.showSectors = options.showSectors? options.showSectors: false;
+	}
+	
+	register(ball)
+	{
+		this.balls.add(ball);
+		this.sectors.get(ball.sector).add(ball);
+		switch (ball.type)
+		{
+			case 'tree':
+				this.trees.add(ball);
+				break;
+			case 'gatherer':
+				this.gatherers.add(ball);
+				break;
+			case 'hunters':
+				this.hunters.add(ball)
+		}
+	}
 
-		// this.addForest([{x:250, y:150}, {x:250, y:250}, {x:450, y:100}, {x:300, y:180}]);
-		this.addRandomForest(30);
-		for (let i =0; i<5; i++) this.addGatherer({x:100 + 40* i, y:100 + 20* i}); 
-		// this.addHunter({x:250, y:300}, {dx:1, dy:1})
+	unregister(ball)
+	{
+		this.balls.delete(ball);
+		this.sectors.delete(ball.sector).add(ball);
+		switch (ball.type)
+		{
+			case 'tree':
+				this.trees.delete(ball);
+				break;
+			case 'gatherer':
+				this.gatherers.delete(ball);
+				break;
+			case 'hunters':
+				this.hunters.delete(ball)
+		}
+	}
 
-	}
-	addBall(options)
-	{
-		this.balls.add(new Ball({app: this, pos: options.pos, r: this.r, diraction: options.diraction}));
-	}
-	addGatherer(pos)
-	{
-		let gatherer = new Gatherer({app: this, pos})
-		this.balls.add(gatherer)
-		this.gatherers.add(gatherer)
-	}
-	addHunter(pos, diraction)
-	{
-		this.balls.add(new Hunter({app: this, pos, diraction}))
-	}
-	addRandomForest(n)
+	getRandomPositions(n)
 	{
 		let positions = [], x, y;
 		for (let i = 0; i<n; i++)
 		{
-			x = 20 + Math.random()*(this.w - 40);
-			y = 20 + Math.random()*(this.h - 40);
+			x = 40 + Math.random()*(this.w - 80);
+			y = 40 + Math.random()*(this.h - 80);
 			positions.push({x, y});
 		}
-		this.addForest(positions);
+		return positions;
 	}
-	addForest(positions)
+
+	addElems(type, n)
 	{
+		let positions = this.getRandomPositions(n);
+		let ball;
 		for (let pos of positions)
-			this.balls.add(new Tree({app: this, pos}));
+		{
+			switch (type)
+			{
+				case 'tree':
+					ball = new Tree({app: this, pos});
+					break;
+				case 'gatherer':
+					ball = new Gatherer({app: this, pos});
+					break;
+				case 'hunters':
+					ball = new Hunter({app: this, pos});
+					break;
+			}
+			this.register(ball);
+		}
 	}
-	addRandomBall()
-	{
-		let x = getRandomInt(this.w - this.r, this.r);
-		let y = getRandomInt(this.h - this.r, this.r);
-		let dx = getRandomInt(5, 1) * (1 - 2 * getRandomInt(2, 0));
-		let dy = getRandomInt(5, 1) * (1 - 2 * getRandomInt(2, 0));
-
-		this.addBall({pos:{x,y}, diraction:{dx,dy}});
-	}
-	removeBalls()
-	{
-		this.balls = new Set();
-	}
-
+	
 	movingBalls()
 	{
 		for (let ball of this.balls.values()) ball.move()
@@ -104,25 +126,23 @@ class Application
 
 	render()
 	{	
-		let sumPower = 0;
-		this.movingBalls();
 		this.ctx.clearRect(0, 0, this.w, this.h);
-		this.renderSectors();
+		if (this.showSectors) this.renderSectors();
 		for (let ball of [...this.balls].sort(Ball.compareFunction))
 		{
 			ball.draw();
-			if (ball.type === 'gatherer')
-			{
-				sumPower += ball.power;
-			}
 		}
-		this.scoreLabel.innerText = sumPower;
-
+	}
+	update()
+	{
+		this.movingBalls()
+		this.render()
 	}
 	stopRender()
 	{
 		clearInterval(this.processRenderId);
 	}
+
 	changeSector(sector, ball)
 	{
 		if (sector === ball.sector) return;
@@ -130,10 +150,19 @@ class Application
 		this.sectors.get(ball.sector).delete(ball);
 		this.sectors.get(sector).add(ball);		
 	}
-}
-
-function getRandomInt(max, min = 0) { 
-	return Math.floor(Math.random() * (max - min)) + min; 
+	addPower(type)
+	{
+		switch (type)
+		{
+			case 'gatherer':
+				for (let gatherer of this.gatherers) gatherer.power += 100;
+				break;
+			case 'hunters':
+				for (let hunters of this.hunterss) hunters.power += 100;
+				break;
+		}
+		
+	}
 }
 
 export default Application

@@ -1,6 +1,22 @@
 *{
 	padding: 0;
 	margin: 0;
+	box-sizing: border-box;
+}
+li
+{
+	margin-left: 20px;
+}
+body
+{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+header
+{
+	width: 100%;
+	border-bottom: 1px solid #000;
 }
 canvas { 
 	cursor: pointer;
@@ -15,4 +31,52 @@ canvas {
 .deactive
 {
 	background: #afa;
+}
+
+#github
+{
+	width: 64px;
+}
+a
+{
+	color:#000;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	background: #eee;
+}
+#controls, #info
+{
+	max-width: 60%;
+	background: #eee;
+	padding: 10px;
+	border: 2px solid #555;
+	margin-bottom: 20px;
+}
+#settings>button
+{
+	background: #fff;
+	color: #fff;
+	border: none;
+	outline: none;
+}
+#settings>button>img
+{
+	width: 32px;
+	margin: 2px;
+}
+#settings>button>img:hover
+{
+	width: 36px;
+	margin: 0;
+}
+@media screen and (min-width:100px) and (max-width:800px) {
+	canvas
+	{
+		width: calc(100% - 10px);
+	}
+	#controls, #info
+	{
+		max-width: calc(100% - 10px);
+	}
 }
