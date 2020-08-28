@@ -4,29 +4,29 @@
 	<meta charset="UTF-8">
 	<title>Имитация эволюции</title>
 	<link rel="stylesheet" href="style.css">
-	<link rel="shortcut icon" href="favicon.ico" type="image/ico">
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 	<header>
-		<h4><a href="https://github.com/AlexandrGrents/ball"><img id="github" src="github.svg">GitHub</a></h4>
+		<h4><a href="https://github.com/AlexandrGrents/ball"><img id="github" src="images/github.svg">GitHub</a></h4>
 	</header>
 	<main>
 		<canvas id="сanvas" width="780" height="520"></canvas>
 		<div id="settings">
-			<button id="controls-show"><img src="cog-solid.svg"></button>
-			<button id="info-show"><img src="info-circle-solid.svg"></button>
+			<button id="controls-show"><img src="images/cog-solid.svg"></button>
+			<button id="info-show"><img src="images/info-circle-solid.svg"></button>
 		</div>
 	</main>
 	<section id="controls" hidden>
 		<p>До обновления леса: <span id="timer"></span> из <span id="total-time"></span></p>
 		<select id="speed">
-			<option value="1">1 fps</option>
-			<option value="10">10 fps</option>
-			<option selected value="25">25 fps</option>
-			<option value="50">50 fps</option>
-			<option value="100">100 fps</option>
-			<option value="200">200 fps</option>
+			<option value="1">1 обновлоение в секунду</option>
+			<option value="10">10 обновлоений в секунду</option>
+			<option selected value="25">25 обновлоений в секунду</option>
+			<option value="50">50 обновлоений в секунду</option>
+			<option value="100">100 обновлоений в секунду</option>
+			<option value="200">200 обновлоений в секунду</option>
 		</select>
 		<select id="forest">
 			<option selected value="0">0 деревьев</option>
@@ -40,9 +40,10 @@
 		<button id="add-power">Подать всем на пропитание</button>
 		<button id="add-gatherer">Добавить травоядного</button>
 		<button id="add-hunter">Добавить хищника</button>
-		<button id="pause">Пауза</button>
+		<button id="pause"><img src="images/pause-solid.svg"></button>
 		<br><br>
 		<input type="checkbox" id="show-sectors" name="show-sectors"><label for="show-sectors">Показать секторы</label>
+		<input type="checkbox" id="show-view-ranges" name="show-view-ranges"><label for="show-view-ranges">Показать радиус обзора</label>
 		<input type="checkbox" checked id="reproduction-mode" name="reproduction-mode"><label for="reproduction-mode">Режим деления клеток</label>
 	</section>
 	<section id="info" hidden>

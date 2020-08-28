@@ -16,6 +16,7 @@ let addHunter = document.getElementById('add-hunter');
 
 
 let showSectors = document.getElementById('show-sectors');
+let showViewRanges = document.getElementById('show-view-ranges');
 let reproductionMode = document.getElementById('reproduction-mode');
 
 let speedSelect = document.getElementById('speed');
@@ -24,7 +25,7 @@ let forestSelect = document.getElementById('forest');
 let timeLabel = document.getElementById('timer');
 let totalTimeLabel = document.getElementById('total-time');
 
-let app = new Application({canvas, sectors: {x:20, y: 20}, showSectors: showSectors.checked, reproductionMode: reproductionMode.checked});
+let app = new Application({canvas, sectors: {x:20, y: 20}, showSectors: showSectors.checked, reproductionMode: reproductionMode.checked, showViewRanges: showViewRanges.checked});
 globalThis.app = app;
 
 app.addElems('tree', 50);
@@ -40,11 +41,20 @@ let renderId = setInterval(() => {if (!pauseActive) app.update()}, mspf)
 let addTreesId = setInterval(() => {if (!pauseActive) app.addElems('tree', newTreeCount)}, mspf*200)
 let timerId = setInterval(() => timeLabel.change(), 1000);
 
-pause.onclick = (event) => {pauseActive = !pauseActive; event.target.innerText = pauseActive ? 'Подолжить' : 'Пауза'};
+pause.onclick = (event) => {pauseActive = !pauseActive; event.target.src = pauseActive ? 'images/play-solid.svg' : 'images/pause-solid.svg'};
 addPower.onclick = () => {app.addPower('gatherer'); app.render();};
-addGatherer.onclick = () => {app.addElems('gatherer', 1); app.render();};
-addHunter.onclick = () => {app.addElems('hunter', 1); app.render();};
+addGatherer.onclick = () => {
+	app.populationLimit++;
+	app.addElems('gatherer', 1); 
+	app.render();
+};
+addHunter.onclick = () => {
+	app.populationLimit++;
+	app.addElems('hunter', 1); 
+	app.render();
+};
 showSectors.onclick = (event) => {app.showSectors = event.target.checked; app.render();};
+showViewRanges.onclick = (event) => {app.showViewRanges = event.target.checked; app.render();}
 reproductionMode.onclick = (event) => {app.reproductionMode = event.target.checked; app.render();};
 timeLabel.change = function(){if (!pauseActive) {this.innerText = i; i = (timeForAddTrees + i - 1) % timeForAddTrees}};
 totalTimeLabel.change = function(){if (!pauseActive) {this.innerText = timeForAddTrees}};

@@ -18,6 +18,7 @@ class Application
 
 		this.perX = (options.sectors && options.sectors.x) ? options.sectors.x : 5;
 		this.perY = (options.sectors && options.sectors.y) ? options.sectors.y : 5;
+		this.maxSectors = this.perX * this.perY;
 
 		this.r = 20;
 		this.probably = 0.2;
@@ -32,10 +33,23 @@ class Application
 		for (let i =0; i<this.perX * this.perY; i++) this.sectors.set(i,new Set());
 		this.showSectors = options.showSectors ? options.showSectors: false;
 		this.reproductionMode = options.reproductionMode ? options.reproductionMode: false;
+
+		this.population = 0;
+		this.populationLimit = 10000;
+
+		this.showViewRanges = options.showViewRanges ? options.showViewRanges: false;
+
+		this.hashedSectors = new Map();
+	}
+
+	get limit()
+	{
+		return this.population > this.populationLimit;
 	}
 	
 	register(ball)
 	{
+		this.population++;
 		this.balls.add(ball);
 		this.sectors.get(ball.sector).add(ball);
 		switch (ball.type)
@@ -46,7 +60,7 @@ class Application
 			case 'gatherer':
 				this.gatherers.add(ball);
 				break;
-			case 'hunters':
+			case 'hunter':
 				this.hunters.add(ball);
 				break;
 			case 'corpse':
@@ -57,6 +71,7 @@ class Application
 
 	unregister(ball)
 	{
+		this.population--;
 		this.balls.delete(ball);
 		this.sectors.get(ball.sector).delete(ball);
 		switch (ball.type)
@@ -67,12 +82,23 @@ class Application
 			case 'gatherer':
 				this.gatherers.delete(ball);
 				break;
-			case 'hunters':
+			case 'hunter':
 				this.hunters.delete(ball)
 			case 'corpse':
 				this.corpses.delete(ball);
 				break;
 		}
+	}
+
+	getHashedSectorNumbers(n, viewRange)
+	{
+		return this.hashedSectors.get({n, viewRange});
+	}
+
+
+	setHashedSectorNumbers(n, viewRange, sectors)
+	{
+		this.hashedSectors.set({n, viewRange}, sectors);
 	}
 
 	getRandomPositions(n)
@@ -87,23 +113,27 @@ class Application
 		return positions;
 	}
 
-	addElems(type, n, poss = null)
+	addElems(type, n, poss = null, gender = null)
 	{
 		let positions = poss ? poss: this.getRandomPositions(n);
 		let ball;
 		for (let pos of positions)
 		{
-			if (pos.x < 10 || pos.y < 10 || pos.x > (this.w - 10) || pos.y > (this.h - 10)) continue;
+			if (this.limit) continue;
+			if (pos.x < 10) pos.x = 10;
+			if (pos.y < 10) pos.y = 10;
+			if (pos.x > this.w - 10) pos.x = this.w - 10;
+			if (pos.y > this.h - 10) pos.y = this.h - 10;
 			switch (type)
 			{
 				case 'tree':
 					ball = new Tree({app: this, pos});
 					break;
 				case 'gatherer':
-					ball = new Gatherer({app: this, pos});
+					ball = new Gatherer({app: this, pos, gender});
 					break;
 				case 'hunter':
-					ball = new Hunter({app: this, pos});
+					ball = new Hunter({app: this, pos, gender});
 					break;
 			}
 			this.register(ball);
@@ -117,6 +147,7 @@ class Application
 	renderSectors()
 	{
 		this.ctx.beginPath();
+		this.ctx.fillStyle = '#000000';
 		let dx = Math.floor(this.w/this.perX);
 		let dy = Math.floor(this.h/this.perY);
 
@@ -125,10 +156,16 @@ class Application
 			this.ctx.moveTo(x, 0);
 			this.ctx.lineTo(x, this.h);
 		}
+
 		for (let y = 0; y < this.h; y+= dy)
 		{
 			this.ctx.moveTo(0, y);
 			this.ctx.lineTo(this.w, y);
+			for (let x = 0; x < this.perY; x++)
+			{
+				this.ctx.fillText(Math.floor(this.perX*y/dy) + x, x * dx + 3 , y + 12);
+
+			}
 		}
 		this.ctx.stroke();  
 		this.ctx.closePath();
