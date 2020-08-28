@@ -28,9 +28,10 @@ let totalTimeLabel = document.getElementById('total-time');
 let app = new Application({canvas, sectors: {x:20, y: 20}, showSectors: showSectors.checked, reproductionMode: reproductionMode.checked, showViewRanges: showViewRanges.checked});
 globalThis.app = app;
 
-app.addElems('tree', 50);
-app.addElems('gatherer',6);
-app.addElems('hunter',1);
+app.addElems('tree', 100);
+app.addElems('gatherer',2, null, 'male');
+app.addElems('gatherer',2, null, 'female');
+// app.addElems('hunter',1);
 
 let mspf = Math.floor(1000/parseInt(speedSelect.value));
 let timeForAddTrees = Math.floor(200*mspf/1000);

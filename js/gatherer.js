@@ -9,8 +9,21 @@ class Gatherer extends Animal
 		super(Object.assign(options, {r: 20, speed: 5, color: '#0095DD', viewRange: 5}));
 		this.power = 100;
 		this.type = 'gatherer';
-		this.powerForReproduction = 150;
 		this.powerForMove = 1;
+		this.powerForSatiety = 500;
+		this.countForPregnant = 50;
+		this.countForAfterPregant = 30;
+	}
+	get powerForReproduction()
+	{
+		if (this.gender === 'male') 
+		{
+			return 150;
+		}
+		else
+		{
+			return 200;
+		}
 	}
 }
 

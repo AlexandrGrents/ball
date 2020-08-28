@@ -6,6 +6,7 @@ class Animal extends Ball
 	static foodType = new Set();
 	static maleColor = '#03fce3';
 	static femaleColor = '#f500b4';
+	static pregnantColor = '#d080ff';
 	constructor(options)
 	{
 		super(options);
@@ -22,14 +23,36 @@ class Animal extends Ball
 		
 		this.probably = 0.02;
 		this.age = 0;
+		this.isPregnant = false;
+		this.pregnantCounter = null;
+		this.afterPregnantCounter = null;
 	}
+
+	get isHungry()
+	{
+		return this.power < this.powerForSatiety;
+	}
+
+	get isWantReproduction()
+	{
+		return (this.power > 2 * this.powerForReproduction) && (!this.isPregnant) && (this.afterPregnantCounter === null);
+	}
+
 	move()
 	{
 		this.age++;
 		if (this.power <=0 || Math.random()<(0.001*this.age/(10*this.power))) return this.dead();
 		this.power -=this.powerForMove;
 		if (Math.random() < this.probably) this.defineRandomDiraction();
-		if (this.power > 2 * this.powerForReproduction && this.app.reproductionMode) this.reproduction();
+		if (this.isPregnant) this.reproduction();
+		if (this.afterPregnantCounter === 0) 
+		{
+			this.afterPregnantCounter = null;
+		}
+		else if (this.afterPregnantCounter > 0)
+		{
+			this.afterPregnantCounter--;
+		}
 		this.find();
 		super.move();
 	}
@@ -61,9 +84,56 @@ class Animal extends Ball
 
 	find()
 	{
+		if (this.isHungry) this.findFood();
+		if (this.isWantReproduction) this.findForReproduction();
+	}
+
+	findForReproduction()
+	{
+		let partners = new Set();
+		for (let sectorNumber of this.viewSectorNumbers)
+		{
+			for (let animal of this.app.sectors.get(sectorNumber))
+			{
+				if (this.type === animal.type && this.gender !== animal.gender && animal.isWantReproduction)
+				{
+					partners.add(animal);
+				}
+			}
+		}
+		let nearestPartner, minDist = null, dist;
+		for (let partner of partners)
+		{
+			dist = this.calcDistFor({x: partner.x, y:partner.y});
+			if (minDist === null || minDist > dist)
+			{
+				minDist = dist;
+				nearestPartner = partner;
+			}
+		}
+		if (minDist!==null)
+		{
+			if (minDist < 2*this.r)
+			{
+				this.reproduction();
+				nearestPartner.reproduction();
+			}
+			else
+			{
+				this.changeDiractionFor({x: nearestPartner.x, y:nearestPartner.y});
+			}
+			
+		} 
+		
+
+	}
+
+	findFood()
+	{
 		let foods = new Set();
 		for (let sectorNumber of this.viewSectorNumbers)
 		{
+			
 			for (let ball of this.app.sectors.get(sectorNumber))
 			{
 				if (this.__proto__.constructor.foodType.has(ball.type))
@@ -85,9 +155,40 @@ class Animal extends Ball
 	}
 	reproduction()
 	{
-		let gender = Math.random()>0.5 ? 'male' : 'female';
-		this.power -= this.powerForReproduction;
-		this.app.addElems(this.type, 1, [{x: this.x, y:this.y}], gender);
+		if (this.gender === 'male')
+		{
+			this.power -= this.powerForReproduction;
+		}
+		else
+		{
+			if (this.isPregnant && this.pregnantCounter <= 0)
+			{
+				let gender = Math.random()>0.5 ? 'male' : 'female';
+				this.power -= this.powerForReproduction;
+				if (this.x > 30 && this.y > 30)
+				{
+					this.app.addElems(this.type, 1, [{x: this.x - 20, y:this.y - 20}], gender);			
+				}
+
+				else
+				{
+					this.app.addElems(this.type, 1, [{x: this.x, y:this.y}], gender);
+				}
+				this.isPregnant = false;
+				this.pregnantCounter = null;
+				this.afterPregnantCounter = this.countForAfterPregant;
+			}
+			else if (this.isPregnant)
+			{
+				this.pregnantCounter--;
+			}
+			else
+			{
+				this.pregnantCounter = this.countForPregnant;
+				this.isPregnant = true;
+			}
+		}	
+		
 
 	}
 	eat(food)
@@ -103,19 +204,56 @@ class Animal extends Ball
 
 	draw()
 	{
-		let color = (this.gender ==='male') ? Animal.maleColor : Animal.femaleColor;
+		let color;
+		if (this.gender ==='male')
+		{
+			color = Animal.maleColor;
+		}
+		else if (this.isPregnant)
+		{
+			color = Animal.pregnantColor;
+		}
+		else
+		{
+			color = Animal.femaleColor;
+		}
 		super.draw();
 		this.app.ctx.beginPath();
-		this.app.ctx.arc(this.x, this.y+12, 5, 0, Math.PI*2);
+		this.app.ctx.arc(this.x, this.y+12, 7, 0, Math.PI*2);
 		this.app.ctx.fillStyle = color;
 	    this.app.ctx.fill();
+	    this.app.ctx.closePath();
+
+	    if (this.isPregnant)
+	    {
+	    	this.app.ctx.beginPath();
+	    	this.app.ctx.fillStyle = '#000000';
+	    	this.app.ctx.fillText(this.pregnantCounter, this.x - 6, this.y + 15);
+	    	this.app.ctx.closePath();
+	    }
+
+
+	    this.app.ctx.beginPath();
+	    this.app.ctx.fillStyle = '#000000';
 	    if (this.app.showViewRanges)
 	    {
-	    	this.app.ctx.moveTo(this.x + this.r + + this.viewRange * this.app.perX, this.y)
+	    	this.app.ctx.moveTo(this.x + this.r + this.viewRange * this.app.perX, this.y)
 	    	this.app.ctx.arc(this.x, this.y, this.r + this.viewRange * this.app.perX, 0, Math.PI*2);
 	    	this.app.ctx.stroke();
 	    }
+	    this.app.ctx.closePath();
+
 	    
+	    this.app.ctx.beginPath();
+	    this.app.ctx.arc(this.x-5, this.y-12, 4, 0, Math.PI*2);
+	    this.app.ctx.fillStyle = (this.isWantReproduction) ? '#24ff48' : '#ff7d90';
+	    this.app.ctx.fill();    
+	    this.app.ctx.closePath();
+
+	    this.app.ctx.beginPath();
+	    this.app.ctx.arc(this.x+5, this.y-12, 4, 0, Math.PI*2);
+	    this.app.ctx.fillStyle = (this.isHungry) ? '#24ff48' : '#ff7d90';
+	    this.app.ctx.fill();    
 	    this.app.ctx.closePath();
 	}
 }
