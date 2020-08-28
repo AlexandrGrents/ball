@@ -131,6 +131,7 @@ class Animal extends Ball
 	findFood()
 	{
 		let foods = new Set();
+		let haveAnimalAround = false;
 		for (let sectorNumber of this.viewSectorNumbers)
 		{
 			
@@ -140,18 +141,32 @@ class Animal extends Ball
 				{
 					if (Math.abs(this.x - ball.x) <5 && Math.abs(this.y - ball.y) < 5) this.eat(ball);
 					else foods.add(ball);
-				}	
+				}
+				else if (!haveAnimalAround && this.type === ball.type)
+				{
+					haveAnimalAround = true;
+				}
 			}
 			
 		}
-		let nearestFood, minDist = null, dist;
-
-		for (let food of foods)
+		if (haveAnimalAround && foods.lenght !== 0)
 		{
-			dist = this.calcDistFor({x:food.x, y: food.y})
-			if (minDist === null || minDist > dist) { minDist = dist; nearestFood = food; }
+			foods = [...foods];
+			let randomNumber = Math.floor(Math.random()*foods.lenght);
+			let randomFood = foods[randomNumber];
+			this.changeDiractionFor({x:randomFood.x, y:randomFood.y});
 		}
-		if (minDist !== null) this.changeDiractionFor({x:nearestFood.x, y:nearestFood.y});
+		else
+		{
+			let nearestFood, minDist = null, dist;
+			for (let food of foods)
+			{
+				dist = this.calcDistFor({x:food.x, y: food.y})
+				if (minDist === null || minDist > dist) { minDist = dist; nearestFood = food; }
+			}
+			if (minDist !== null) this.changeDiractionFor({x:nearestFood.x, y:nearestFood.y});
+		}
+		
 	}
 	reproduction()
 	{
