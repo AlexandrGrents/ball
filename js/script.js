@@ -17,7 +17,6 @@ let addHunter = document.getElementById('add-hunter');
 
 let showSectors = document.getElementById('show-sectors');
 let showViewRanges = document.getElementById('show-view-ranges');
-let reproductionMode = document.getElementById('reproduction-mode');
 
 let speedSelect = document.getElementById('speed');
 let forestSelect = document.getElementById('forest');
@@ -25,7 +24,7 @@ let forestSelect = document.getElementById('forest');
 let timeLabel = document.getElementById('timer');
 let totalTimeLabel = document.getElementById('total-time');
 
-let app = new Application({canvas, sectors: {x:20, y: 20}, showSectors: showSectors.checked, reproductionMode: reproductionMode.checked, showViewRanges: showViewRanges.checked});
+let app = new Application({canvas, sectors: {x:20, y: 20}, showSectors: showSectors.checked, reproductionMode: true, showViewRanges: showViewRanges.checked});
 globalThis.app = app;
 
 app.addElems('tree', 100);
@@ -56,7 +55,7 @@ addHunter.onclick = () => {
 };
 showSectors.onclick = (event) => {app.showSectors = event.target.checked; app.render();};
 showViewRanges.onclick = (event) => {app.showViewRanges = event.target.checked; app.render();}
-reproductionMode.onclick = (event) => {app.reproductionMode = event.target.checked; app.render();};
+
 timeLabel.change = function(){if (!pauseActive) {this.innerText = i; i = (timeForAddTrees + i - 1) % timeForAddTrees}};
 totalTimeLabel.change = function(){if (!pauseActive) {this.innerText = timeForAddTrees}};
 speedSelect.onchange = (event) =>
