@@ -26,7 +26,16 @@ class Animal extends Ball
 		this.isPregnant = false;
 		this.pregnantCounter = null;
 		this.afterPregnantCounter = null;
+		this.target = null;
 	}
+
+	setTarget(pos)
+	{
+		if (this.target === null) this.target = pos;
+		if (Math.abs(this.target.x - this.x)<3 && Math.abs(this.target.y - this.y) < 3) this.target = null;
+		else this.changeDiractionFor(this.target)
+	}
+
 
 	get isHungry()
 	{
@@ -124,8 +133,6 @@ class Animal extends Ball
 			}
 			
 		} 
-		
-
 	}
 
 	findFood()
@@ -142,19 +149,21 @@ class Animal extends Ball
 					if (Math.abs(this.x - ball.x) <5 && Math.abs(this.y - ball.y) < 5) this.eat(ball);
 					else foods.add(ball);
 				}
-				else if (!haveAnimalAround && this.type === ball.type)
+				else if (!haveAnimalAround && this.type === ball.type && this !==ball)
 				{
 					haveAnimalAround = true;
 				}
 			}
 			
 		}
-		if (haveAnimalAround && foods.lenght !== 0)
+		if (haveAnimalAround && foods.size != 0)
 		{
 			foods = [...foods];
-			let randomNumber = Math.floor(Math.random()*foods.lenght);
+			let randomNumber = Math.floor(Math.random()*foods.length);
 			let randomFood = foods[randomNumber];
-			this.changeDiractionFor({x:randomFood.x, y:randomFood.y});
+			if (randomFood === undefined) randomFood = foods[0];
+			if (!randomFood.x || !randomFood.y) return;
+			this.setTarget({x:randomFood.x, y:randomFood.y});
 		}
 		else
 		{
@@ -164,7 +173,7 @@ class Animal extends Ball
 				dist = this.calcDistFor({x:food.x, y: food.y})
 				if (minDist === null || minDist > dist) { minDist = dist; nearestFood = food; }
 			}
-			if (minDist !== null) this.changeDiractionFor({x:nearestFood.x, y:nearestFood.y});
+			if (minDist !== null) this.setTarget({x:nearestFood.x, y:nearestFood.y});
 		}
 		
 	}
@@ -210,6 +219,7 @@ class Animal extends Ball
 	{
 		this.power = food.sustenance ? this.power + food.sustenance : this.power + 100 + Math.floor(food.power / 4);
 		food.delete();
+		this.target = null;
 	}
 	dead()
 	{
