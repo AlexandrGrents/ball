@@ -104,20 +104,16 @@ class Ball
 		this.app.unregister(this);
 	}
 
+	static types = ['ball', 'seed', 'tree', 'corse', 'gatherer', 'hunter']
+
 	static compareFunction(ball1, ball2)
 	{
 		if (ball1.type ===ball2.type) return 0;
-		if (ball1.type ==='ball') return -1;
-		if (ball2.type === 'ball') return 1;
-		
-		if (ball1.type ==='tree') return -1;
-		if (ball2.type === 'tree') return 1;
-
-		if (ball1.type === 'corpse') return -1;
-		if (ball2.type === 'corpse') return 1;
-
-		if (ball1.type === 'gatherer') return -1;
-		if (ball2.type === 'gatherer') return 1;
+		for (let type of Ball.types)
+		{
+			if (ball1.type === type) return -1;
+			if (ball2.type === type) return 1;
+		}
 	}
 }
 

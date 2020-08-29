@@ -1,5 +1,5 @@
 import Ball from './ball.js'
-import Tree from './tree.js'
+import Seed from './seed.js'
 
 class Corpse extends Ball
 {
@@ -21,8 +21,8 @@ class Corpse extends Ball
 	}
 	delete()
 	{
-		
-		if (this.sustenance === 0) this.app.register(new Tree({app: this.app, pos: {x: this.x, y: this.y}}));
+		if (this.app.debug) console.log('delete', this)
+		if (this.sustenance === 0) this.app.register(new Seed({app: this.app, pos: {x: this.x, y: this.y}}));
 		this.sustenance = 0;
 		super.delete();
 	}

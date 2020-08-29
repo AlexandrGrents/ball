@@ -9,7 +9,7 @@ document.getElementById('controls-show').onclick = () => controlsSection.hidden 
 document.getElementById('info-show').onclick = () => infoSection.hidden = !infoSection.hidden
 
 let pauseActive = false;
-let pause = document.getElementById('pause');
+let pauseBtn = document.getElementById('pause');
 let addPower = document.getElementById('add-power');
 let addGatherer = document.getElementById('add-gatherer');
 let addHunter = document.getElementById('add-hunter');
@@ -24,12 +24,26 @@ let forestSelect = document.getElementById('forest');
 let timeLabel = document.getElementById('timer');
 let totalTimeLabel = document.getElementById('total-time');
 
-let app = new Application({canvas, sectors: {x:20, y: 20}, showSectors: showSectors.checked, reproductionMode: true, showViewRanges: showViewRanges.checked});
+let treePopulationLimit = document.getElementById('trees-limit')
+let animalPopulationLimit = document.getElementById('animals-limit')
+
+let app = new Application({
+	canvas, 
+	sectors: {x:20, y: 20}, 
+	showSectors: showSectors.checked, 
+	reproductionMode: true, 
+	showViewRanges: showViewRanges.checked,
+	treePopulationLimit: parseInt(treePopulationLimit.value),
+	animalPopulationLimit: parseInt(animalPopulationLimit.value)
+
+});
 globalThis.app = app;
 
 app.addElems('tree', 100);
-app.addElems('gatherer',2, null, 'male');
-app.addElems('gatherer',2, null, 'female');
+app.addElems('gatherer',5, null, 'male');
+app.addElems('gatherer',5, null, 'female');
+// app.addElems('hunter',2, null, 'male');
+// app.addElems('hunter',2, null, 'female');
 // app.addElems('hunter',1);
 
 let mspf = Math.floor(1000/parseInt(speedSelect.value));
@@ -41,7 +55,7 @@ let renderId = setInterval(() => {if (!pauseActive) app.update()}, mspf)
 let addTreesId = setInterval(() => {if (!pauseActive) app.addElems('tree', newTreeCount)}, mspf*200)
 let timerId = setInterval(() => timeLabel.change(), 1000);
 
-pause.onclick = (event) => {pauseActive = !pauseActive; event.target.src = pauseActive ? 'images/play-solid.svg' : 'images/pause-solid.svg'};
+pauseBtn.onclick = (event) => {pauseActive = !pauseActive; pauseBtn.firstElementChild.src = pauseActive ? 'images/play-solid.svg' : 'images/pause-solid.svg'};
 addPower.onclick = () => {app.addPower('gatherer'); app.render();};
 addGatherer.onclick = () => {
 	app.populationLimit++;
@@ -70,5 +84,15 @@ speedSelect.onchange = (event) =>
 	addTreesId = setInterval(() => {if (!pauseActive) app.addElems('tree', newTreeCount)}, mspf*200)
 }
 forestSelect.onchange = (event) => newTreeCount = parseInt(event.target.value)
+
+treePopulationLimit.onchange = (event) => {
+	app.treePopulationLimit = parseInt(event.target.value);
+	document.getElementById('trees-limit-value').innerText = event.target.value;
+}
+animalPopulationLimit.onchange = (event) => {
+	app.animalPopulationLimit = parseInt(event.target.value);
+	document.getElementById('animals-limit-value').innerText = event.target.value;
+}
+
 timeLabel.change();
 totalTimeLabel.change();

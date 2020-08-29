@@ -1,4 +1,5 @@
 import Ball from './ball.js'
+import Seed from './seed.js'
 import Tree from './tree.js'
 import Gatherer from './gatherer.js'
 import Hunter from './hunter.js'
@@ -24,8 +25,10 @@ class Application
 		this.probably = 0.2;
 		this.balls = new Set();
 
-		this.gatherers = new Set();
+		
 		this.trees = new Set();
+		this.seeds = new Set();
+		this.gatherers = new Set();
 		this.hunters = new Set();
 		this.corpses = new Set();
 
@@ -34,26 +37,48 @@ class Application
 		this.showSectors = options.showSectors ? options.showSectors: false;
 		this.reproductionMode = options.reproductionMode ? options.reproductionMode: false;
 
-		this.population = 0;
-		this.populationLimit = 10000;
+
+
+		this.animalPopulationLimit = options.animalPopulationLimit ? options.animalPopulationLimit : 100;
+		this.treePopulationLimit = options.treePopulationLimit ? options.treePopulationLimit : 1900;
+		
 
 		this.showViewRanges = options.showViewRanges ? options.showViewRanges: false;
 
 		this.hashedSectors = new Map();
+
+		this.logger = {
+			'trees': [],
+			'gatherers': [],
+			'hunters': []
+		}
+
+		this.updateCount = 0;
 	}
 
-	get limit()
+	get allPopulationLimit() {return this.animalPopulationLimit + this.treePopulationLimit;}
+
+	get limit ()
 	{
-		return this.population > this.populationLimit;
+		if (this.animalLimit && this.treeLimit) return true;
+		return (this.trees.size + this.seeds.size + this.gatherers.size + this.hunters.size > this.allPopulationLimit)
 	}
+
+	get animalLimit()	{ return (this.gatherers.size + this.hunters.size > this.animalPopulationLimit)	}
+
+	get treeLimit()	{ return (this.trees.size + this.seeds.size> this.treePopulationLimit) }
+
 	
 	register(ball)
 	{
-		this.population++;
+		if (this.debug) console.log('register', ball)
 		this.balls.add(ball);
 		this.sectors.get(ball.sector).add(ball);
 		switch (ball.type)
 		{
+			case 'seed':
+				this.seeds.add(ball);
+				break;
 			case 'tree':
 				this.trees.add(ball);
 				break;
@@ -71,11 +96,13 @@ class Application
 
 	unregister(ball)
 	{
-		this.population--;
 		this.balls.delete(ball);
 		this.sectors.get(ball.sector).delete(ball);
 		switch (ball.type)
 		{
+			case 'seed':
+				this.seeds.delete(ball);
+				break;
 			case 'tree':
 				this.trees.delete(ball);
 				break;
@@ -119,13 +146,19 @@ class Application
 		let ball;
 		for (let pos of positions)
 		{
-			if (this.limit) continue;
+			if (this.limit) break;
+			if (this.animalLimit && (type === 'gatherer' || type === 'hunter')) break;
+			if (this.treeLimit && (type === 'tree' || type === 'seed')) break;
+
 			if (pos.x < 10) pos.x = 10;
 			if (pos.y < 10) pos.y = 10;
 			if (pos.x > this.w - 10) pos.x = this.w - 10;
 			if (pos.y > this.h - 10) pos.y = this.h - 10;
 			switch (type)
 			{
+				case 'seed':
+					ball = new Seed({app: this, pos});
+					break;
 				case 'tree':
 					ball = new Tree({app: this, pos});
 					break;
@@ -182,9 +215,22 @@ class Application
 	}
 	update()
 	{
+		this.updateCount++;
 		this.movingBalls()
+		this.updateLogger()
 		this.render()
 	}
+
+	updateLogger()
+	{
+		if (this.updateCount % 10 != 0) return
+		for (let type in this.logger)
+		{
+			if (this.debug) console.log('update logger [type of log]', type, this.logger)
+			this.logger[type].push(this[type].size);
+		}
+	}
+
 	stopRender()
 	{
 		clearInterval(this.processRenderId);

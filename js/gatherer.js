@@ -10,20 +10,16 @@ class Gatherer extends Animal
 		this.power = 100;
 		this.type = 'gatherer';
 		this.powerForMove = 1;
-		this.powerForSatiety = 500;
-		this.countForPregnant = 50;
-		this.countForAfterPregant = 30;
 	}
 	get powerForReproduction()
 	{
-		if (this.gender === 'male') 
-		{
-			return 150;
-		}
-		else
-		{
-			return 200;
-		}
+		let power = (this.gender === 'male')  ? 100 : 200;
+		return power;
+	}
+	get powerForSatiety()
+	{
+		let power = (this.gender === 'male')  ? 500 : 800;
+		return power;
 	}
 }
 

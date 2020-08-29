@@ -21,18 +21,18 @@
 	<section id="controls" hidden>
 		<p>До обновления леса: <span id="timer"></span> из <span id="total-time"></span></p>
 		<select id="speed">
-			<option value="1">1 обновлоение в секунду</option>
-			<option value="10">10 обновлоений в секунду</option>
-			<option selected value="25">25 обновлоений в секунду</option>
-			<option value="50">50 обновлоений в секунду</option>
-			<option value="100">100 обновлоений в секунду</option>
-			<option value="200">200 обновлоений в секунду</option>
+			<option value="1">1 обновление в секунду</option>
+			<option value="10">10 обновлений в секунду</option>
+			<option selected value="25">25 обновлений в секунду</option>
+			<option value="50">50 обновлений в секунду</option>
+			<option value="100">100 обновлений в секунду</option>
+			<option value="200">200 обновлений в секунду</option>
 		</select>
 		<select id="forest">
-			<option value="0">0 деревьев</option>
+			<option selected value="0">0 деревьев</option>
 			<option value="5">5 деревьев</option>
 			<option value="10">10 деревьев</option>
-			<option selected value="20">20 деревьев</option>
+			<option  value="20">20 деревьев</option>
 			<option value="30">30 деревьев</option>
 			<option value="40">40 деревьев</option>
 			<option value="50">50 деревьев</option>
@@ -42,8 +42,16 @@
 		<button id="add-hunter">Добавить хищника</button>
 		<button id="pause"><img src="images/pause-solid.svg"></button>
 		<br><br>
-		<input type="checkbox" id="show-sectors" name="show-sectors"><label for="show-sectors">Показать секторы</label>
-		<input type="checkbox" id="show-view-ranges" name="show-view-ranges"><label for="show-view-ranges">Показать радиус обзора</label>
+		<input type="checkbox" id="show-sectors"><label for="show-sectors">Показать секторы</label>
+		<input type="checkbox" id="show-view-ranges"><label for="show-view-ranges">Показать радиус обзора</label>
+		<br><br>
+		<h5>Лимит популяции</h5>
+		<input id="trees-limit" type="range" min="100" max="5000" value="1000" step="100"><label for="limit">Макс. растений <b id="trees-limit-value">1000</b> [&#8712; (100 - 5000)]</label>
+		<br>
+		<input id="animals-limit" type="range" min="5" max="250" value="15" step="5"><label for="limit">Макс. животных 	<b id="animals-limit-value">15</b> [&#8712; (5 - 250)]</label>
+		<br><br>
+		<button id="render-gatherers-graph" onclick="alert('функция в разработке')">Построить график популяции собирателей</button>
+		<button id="render-hunters-graph" 	onclick="alert('функция в разработке')">Построить график популяции охотников</button>
 	</section>
 	<section id="info" hidden>
 		<h5>Коротко</h5>

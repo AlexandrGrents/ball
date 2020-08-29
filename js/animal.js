@@ -25,26 +25,30 @@ class Animal extends Ball
 		this.age = 0;
 		this.isPregnant = false;
 		this.pregnantCounter = null;
-		this.afterPregnantCounter = null;
+
+		this.countForPregnant = options.countForPregnant ? options.countForPregnant : 50;
+		this.countForAfterPregant = options.countForAfterPregant ? options.countForAfterPregant : 200;
+
+		this.afterPregnantCounter = (this.gender === 'female') ? this.countForAfterPregant : null;
 		this.target = null;
 	}
 
 	setTarget(pos)
 	{
 		if (this.target === null) this.target = pos;
-		if (Math.abs(this.target.x - this.x)<3 && Math.abs(this.target.y - this.y) < 3) this.target = null;
+		if (Math.abs(this.target.x - this.x)<5 && Math.abs(this.target.y - this.y) < 5) this.target = null;
 		else this.changeDiractionFor(this.target)
 	}
 
 
 	get isHungry()
 	{
-		return this.power < this.powerForSatiety;
+		return this.power < this.powerForSatiety * 1.2;
 	}
 
 	get isWantReproduction()
 	{
-		return (this.power > 2 * this.powerForReproduction) && (!this.isPregnant) && (this.afterPregnantCounter === null);
+		return (!this.app.animalLimit && !this.app.limit && this.power > 2 * this.powerForReproduction) && (!this.isPregnant) && (this.afterPregnantCounter === null);
 	}
 
 	move()
@@ -217,7 +221,7 @@ class Animal extends Ball
 	}
 	eat(food)
 	{
-		this.power = food.sustenance ? this.power + food.sustenance : this.power + 100 + Math.floor(food.power / 4);
+		this.power = food.sustenance ? this.power + food.sustenance : this.power + 150 + Math.floor(food.power);
 		food.delete();
 		this.target = null;
 	}
@@ -254,6 +258,14 @@ class Animal extends Ball
 	    	this.app.ctx.beginPath();
 	    	this.app.ctx.fillStyle = '#000000';
 	    	this.app.ctx.fillText(this.pregnantCounter, this.x - 6, this.y + 15);
+	    	this.app.ctx.closePath();
+	    }
+
+	    if (this.afterPregnantCounter !== null)
+	    {
+	    	this.app.ctx.beginPath();
+	    	this.app.ctx.fillStyle = '#000000';
+	    	this.app.ctx.fillText(this.afterPregnantCounter, this.x - 6, this.y + 15);
 	    	this.app.ctx.closePath();
 	    }
 
