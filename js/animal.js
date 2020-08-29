@@ -29,7 +29,7 @@ class Animal extends Ball
 		this.countForPregnant = options.countForPregnant ? options.countForPregnant : 50;
 		this.countForAfterPregant = options.countForAfterPregant ? options.countForAfterPregant : 200;
 
-		this.afterPregnantCounter = (this.gender === 'female') ? this.countForAfterPregant : null;
+		this.afterPregnantCounter = (this.gender === 'female') ? this.countForAfterPregant : Math.floor(this.countForAfterPregant/ 2);
 		this.target = null;
 	}
 
@@ -48,7 +48,7 @@ class Animal extends Ball
 
 	get isWantReproduction()
 	{
-		return (!this.app.animalLimit && !this.app.limit && this.power > 2 * this.powerForReproduction) && (!this.isPregnant) && (this.afterPregnantCounter === null);
+		return !this.app.animalLimit && this.power > 2 * this.powerForReproduction && !this.isPregnant && this.afterPregnantCounter === null;
 	}
 
 	move()

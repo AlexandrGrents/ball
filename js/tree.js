@@ -20,7 +20,7 @@ class Tree extends  Ball
 	}
 	get isWantReplication()
 	{
-		return !this.app.treeLimit && !this.app.limit && this.sustenance > this.reproductionMaxCount * this.sustenanceForReplication && this.app.reproductionMode
+		return !this.app.treeLimit && this.sustenance > this.reproductionMaxCount * this.sustenanceForReplication && this.app.reproductionMode
 	}
 	grow()
 	{
@@ -35,6 +35,7 @@ class Tree extends  Ball
 			}
 		}
 		if (!treeAround || Math.random() < this.probably) this.sustenance += this.sustenancePerMove;
+		this.r = 14 + this.sustenance/50;
 	}
 	move()
 	{

@@ -94,7 +94,7 @@ class Ball
 	    }
 	    else if (this.sustenance)
 	    {
-	    	this.app.ctx.fillText(Math.floor(this.sustenance), this.x - 12, this.y + 5);
+	    	this.app.ctx.fillText(Math.floor(this.sustenance), this.x - 7, this.y + 10);
 	    }
 	    
 	    this.app.ctx.closePath();

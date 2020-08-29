@@ -5,7 +5,7 @@ class Seed extends Ball
 {
 	constructor(options)
 	{
-		super({app: options.app, pos: options.pos, r: 3, speed:0, color: '#35694f'});
+		super({app: options.app, pos: options.pos, r: 5, speed:0, color: '#abccb4'});
 		this.type = 'seed';
 		this.sustenance = 1;
 		this.sustenanceForTransformation = 50;
@@ -15,6 +15,7 @@ class Seed extends Ball
 	move()
 	{
 		if (Math.random() < this.probably) this.sustenance += this.sustenancePerMove;
+		this.r = 5 + this.sustenance/5
 		if (this.sustenance >= this.sustenanceForTransformation) this.transformation();
 		super.move()
 	}
