@@ -12,6 +12,12 @@ class Seed extends Ball
 		this.sustenancePerMove = 1;
 		this.probably = 0.2;
 	}
+
+	static fromCorse(corse)
+	{
+		return new Seed({app: corse.app, pos: corse});
+	}
+
 	move()
 	{
 		if (Math.random() < this.probably) this.sustenance += this.sustenancePerMove;

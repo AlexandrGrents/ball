@@ -4,14 +4,19 @@
 	<meta charset="UTF-8">
 	<title>Имитация эволюции</title>
 	<link rel="stylesheet" href="style.css">
-	<link rel="shortcut icon" href="images/favicon.ico" type="image/ico">
+	<link rel="shortcut icon" href="images/favicon.png" type="image/png">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 	<header>
-		<h4><a href="https://github.com/AlexandrGrents/ball"><img id="github" src="images/github.svg">GitHub</a></h4>
+		<h4><a id="gitlink" href="https://github.com/AlexandrGrents/ball"><img id="github" src="images/github.svg">GitHub</a></h4>
+
 	</header>
 	<main>
+		<div id="score-container">
+			<h4>Счёт: <span id="score">0</span></h4>
+			<h4>Максимальный счёт: <span id="max-score">0</span></h4>
+		</div>
 		<canvas id="сanvas" width="780" height="520"></canvas>
 		<div id="settings">
 			<button id="controls-show"><img src="images/cog-solid.svg"></button>
@@ -37,9 +42,6 @@
 			<option value="40">40 деревьев</option>
 			<option value="50">50 деревьев</option>
 		</select>
-		<button id="add-power">Подать всем на пропитание</button>
-		<button id="add-gatherer">Добавить травоядного</button>
-		<button id="add-hunter">Добавить хищника</button>
 		<button id="pause"><img src="images/pause-solid.svg"></button>
 		<br><br>
 		<input type="checkbox" id="show-sectors"><label for="show-sectors">Показать секторы</label>

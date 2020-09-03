@@ -9,11 +9,9 @@ document.getElementById('controls-show').onclick = () => controlsSection.hidden 
 document.getElementById('info-show').onclick = () => infoSection.hidden = !infoSection.hidden
 
 let pauseActive = false;
-let pauseBtn = document.getElementById('pause');
-let addPower = document.getElementById('add-power');
-let addGatherer = document.getElementById('add-gatherer');
-let addHunter = document.getElementById('add-hunter');
+function changePause(event) {pauseActive = !pauseActive; pauseBtn.firstElementChild.src = pauseActive ? 'images/play-solid.svg' : 'images/pause-solid.svg'};
 
+let pauseBtn = document.getElementById('pause');
 
 let showSectors = document.getElementById('show-sectors');
 let showViewRanges = document.getElementById('show-view-ranges');
@@ -55,18 +53,9 @@ let renderId = setInterval(() => {if (!pauseActive) app.update()}, mspf)
 let addTreesId = setInterval(() => {if (!pauseActive) app.addElems('tree', newTreeCount)}, mspf*200)
 let timerId = setInterval(() => timeLabel.change(), 1000);
 
-pauseBtn.onclick = (event) => {pauseActive = !pauseActive; pauseBtn.firstElementChild.src = pauseActive ? 'images/play-solid.svg' : 'images/pause-solid.svg'};
-addPower.onclick = () => {app.addPower('gatherer'); app.render();};
-addGatherer.onclick = () => {
-	app.populationLimit++;
-	app.addElems('gatherer', 1); 
-	app.render();
-};
-addHunter.onclick = () => {
-	app.populationLimit++;
-	app.addElems('hunter', 1); 
-	app.render();
-};
+pauseBtn.onclick = changePause;
+// canvas.onclick = changePause;
+
 showSectors.onclick = (event) => {app.showSectors = event.target.checked; app.render();};
 showViewRanges.onclick = (event) => {app.showViewRanges = event.target.checked; app.render();}
 
@@ -96,3 +85,32 @@ animalPopulationLimit.onchange = (event) => {
 
 timeLabel.change();
 totalTimeLabel.change();
+
+let score = document.getElementById('score');
+let maxScore = document.getElementById('max-score');
+
+let maxScoreValue = document.cookie;
+
+if (maxScoreValue) maxScore.innerText = maxScoreValue;
+
+function createClicker(pos)
+{
+	let clicker = document.createElement('div');
+	clicker.classList.add('dna');
+	clicker.style.left = canvas.offsetLeft + pos.x + 'px';
+	clicker.style.top = canvas.offsetTop + pos.y + 'px';
+	clicker.onclick = (event) =>
+	{
+		score.innerText = app.addScore();
+		if (app.score > maxScoreValue)
+		{
+			document.cookie = app.score;
+			maxScore.innerText = app.score;
+		}
+		clicker.remove();
+	};
+	setTimeout(() => {if (clicker) clicker.remove()}, 75*mspf);
+	document.body.append(clicker);
+}
+
+app.addClicker = createClicker;

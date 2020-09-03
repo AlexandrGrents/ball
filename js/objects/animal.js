@@ -106,7 +106,7 @@ class Animal extends Ball
 		let partners = new Set();
 		for (let sectorNumber of this.viewSectorNumbers)
 		{
-			for (let animal of this.app.sectors.get(sectorNumber))
+			for (let animal of this.app.sectors[sectorNumber])
 			{
 				if (this.type === animal.type && this.gender !== animal.gender && animal.isWantReproduction)
 				{
@@ -117,7 +117,7 @@ class Animal extends Ball
 		let nearestPartner, minDist = null, dist;
 		for (let partner of partners)
 		{
-			dist = this.calcDistFor({x: partner.x, y:partner.y});
+			dist = this.calcDistFor(partner);
 			if (minDist === null || minDist > dist)
 			{
 				minDist = dist;
@@ -133,7 +133,7 @@ class Animal extends Ball
 			}
 			else
 			{
-				this.changeDiractionFor({x: nearestPartner.x, y:nearestPartner.y});
+				this.changeDiractionFor(nearestPartner);
 			}
 			
 		} 
@@ -146,7 +146,7 @@ class Animal extends Ball
 		for (let sectorNumber of this.viewSectorNumbers)
 		{
 			
-			for (let ball of this.app.sectors.get(sectorNumber))
+			for (let ball of this.app.sectors[sectorNumber])
 			{
 				if (this.__proto__.constructor.foodType.has(ball.type))
 				{
@@ -167,17 +167,17 @@ class Animal extends Ball
 			let randomFood = foods[randomNumber];
 			if (randomFood === undefined) randomFood = foods[0];
 			if (!randomFood.x || !randomFood.y) return;
-			this.setTarget({x:randomFood.x, y:randomFood.y});
+			this.setTarget(randomFood);
 		}
 		else
 		{
 			let nearestFood, minDist = null, dist;
 			for (let food of foods)
 			{
-				dist = this.calcDistFor({x:food.x, y: food.y})
+				dist = this.calcDistFor(food)
 				if (minDist === null || minDist > dist) { minDist = dist; nearestFood = food; }
 			}
-			if (minDist !== null) this.setTarget({x:nearestFood.x, y:nearestFood.y});
+			if (minDist !== null) this.setTarget(nearestFood);
 		}
 		
 	}
@@ -193,15 +193,11 @@ class Animal extends Ball
 			{
 				let gender = Math.random()>0.5 ? 'male' : 'female';
 				this.power -= this.powerForReproduction;
+				let pos = (this.x > 30 && this.y > 30) ? {x: this.x - 20, y:this.y - 20} : this;
 				if (this.x > 30 && this.y > 30)
-				{
-					this.app.addElems(this.type, 1, [{x: this.x - 20, y:this.y - 20}], gender);			
-				}
-
-				else
-				{
-					this.app.addElems(this.type, 1, [{x: this.x, y:this.y}], gender);
-				}
+				
+				this.app.addElems(this.type, 1, [pos], gender);
+				if (Math.random() > 0.2) this.app.addClicker(pos);
 				this.isPregnant = false;
 				this.pregnantCounter = null;
 				this.afterPregnantCounter = this.countForAfterPregant;
@@ -274,9 +270,14 @@ class Animal extends Ball
 	    this.app.ctx.fillStyle = '#000000';
 	    if (this.app.showViewRanges)
 	    {
-	    	this.app.ctx.moveTo(this.x + this.r + this.viewRange * this.app.perX, this.y)
-	    	this.app.ctx.arc(this.x, this.y, this.r + this.viewRange * this.app.perX, 0, Math.PI*2);
-	    	this.app.ctx.stroke();
+	    	if (this.app.debug) console.log('view range', this.x, this.y + this.viewRange * this.app.perY)
+	    	this.app.ctx.moveTo(this.x + this.viewRange * this.app.perX, this.y)
+	    	this.app.ctx.lineTo(this.x, this.y + this.viewRange * this.app.perY)
+	    	this.app.ctx.lineTo(this.x - this.viewRange * this.app.perX, this.y)
+	    	this.app.ctx.lineTo(this.x, this.y - this.viewRange * this.app.perY)
+	    	this.app.ctx.lineTo(this.x + this.viewRange * this.app.perX, this.y)
+	    	this.app.ctx.stroke()
+	    	
 	    }
 	    this.app.ctx.closePath();
 

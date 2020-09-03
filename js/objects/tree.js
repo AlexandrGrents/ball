@@ -26,7 +26,7 @@ class Tree extends  Ball
 	{
 		if (this.sustenance >= this.maxSustenance) return
 		let treeAround = false;
-		for (let ball of this.app.sectors.get(this.sector))
+		for (let ball of this.app.sectors[this.sector])
 		{
 			if (ball.type === this.type && ball !==this || ball.type === 'seed')
 			{

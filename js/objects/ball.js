@@ -6,6 +6,7 @@ class Ball
 	{
 		this.app = options.app;
 
+		if (options.pos === undefined) console.log(options);
 		this.x = options.pos.x;
 		this.y = options.pos.y;
 		this.r = options.r;

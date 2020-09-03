@@ -1,8 +1,8 @@
-import Ball from './ball.js'
-import Seed from './seed.js'
-import Tree from './tree.js'
-import Gatherer from './gatherer.js'
-import Hunter from './hunter.js'
+import Ball from './objects/ball.js'
+import Seed from './objects/seed.js'
+import Tree from './objects/tree.js'
+import Gatherer from './objects/gatherer.js'
+import Hunter from './objects/hunter.js'
 
 class Application
 {
@@ -32,8 +32,9 @@ class Application
 		this.hunters = new Set();
 		this.corpses = new Set();
 
-		this.sectors = new Map();
-		for (let i =0; i<this.perX * this.perY; i++) this.sectors.set(i,new Set());
+		this.sectors = new Array(this.perX * this.perY);
+		for (let i =0; i<this.sectors.length; i++) this.sectors[i] = new Set();
+
 		this.showSectors = options.showSectors ? options.showSectors: false;
 		this.reproductionMode = options.reproductionMode ? options.reproductionMode: false;
 
@@ -53,7 +54,18 @@ class Application
 			'hunters': []
 		}
 
+		this.score = 0;
+		this.scoreStep = 50;
+
 		this.updateCount = 0;
+
+		this.addClicker = (pos) => console.log('add clicker on', {x: pos.x, y:pos.y})
+	}
+
+	addScore()
+	{
+		this.score += this.scoreStep;
+		return this.score;
 	}
 
 	get allPopulationLimit() {return this.animalPopulationLimit + this.treePopulationLimit;}
@@ -73,7 +85,7 @@ class Application
 	{
 		if (this.debug) console.log('register', ball)
 		this.balls.add(ball);
-		this.sectors.get(ball.sector).add(ball);
+		this.sectors[ball.sector].add(ball);
 		switch (ball.type)
 		{
 			case 'seed':
@@ -97,7 +109,7 @@ class Application
 	unregister(ball)
 	{
 		this.balls.delete(ball);
-		this.sectors.get(ball.sector).delete(ball);
+		this.sectors[ball.sector].delete(ball);
 		switch (ball.type)
 		{
 			case 'seed':
@@ -240,8 +252,8 @@ class Application
 	{
 		if (sector === ball.sector) return;
 		
-		this.sectors.get(ball.sector).delete(ball);
-		this.sectors.get(sector).add(ball);		
+		this.sectors[ball.sector].delete(ball);
+		this.sectors[sector].add(ball);		
 	}
 	addPower(type)
 	{
