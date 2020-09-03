@@ -9,7 +9,7 @@ document.getElementById('controls-show').onclick = () => controlsSection.hidden 
 document.getElementById('info-show').onclick = () => infoSection.hidden = !infoSection.hidden
 
 let pauseActive = false;
-function changePause(event) {pauseActive = !pauseActive; pauseBtn.firstElementChild.src = pauseActive ? 'images/play-solid.svg' : 'images/pause-solid.svg'};
+function changePause() {pauseActive = !pauseActive; pauseBtn.firstElementChild.src = pauseActive ? 'images/play-solid.svg' : 'images/pause-solid.svg'};
 
 let pauseBtn = document.getElementById('pause');
 
@@ -93,6 +93,8 @@ let maxScoreValue = document.cookie;
 
 if (maxScoreValue) maxScore.innerText = maxScoreValue;
 
+let complexity = document.getElementById('complexity')
+
 function createClicker(pos)
 {
 	let clicker = document.createElement('div');
@@ -109,8 +111,25 @@ function createClicker(pos)
 		}
 		clicker.remove();
 	};
-	setTimeout(() => {if (clicker) clicker.remove()}, 75*mspf);
+	setTimeout(() => {if (clicker) clicker.remove()}, parseInt(complexity.value)*mspf);
 	document.body.append(clicker);
 }
 
 app.addClicker = createClicker;
+app.onZeroAnimals = createEndGameMessage;
+
+function createEndGameMessage()
+{
+	if (document.getElementById('end-game-message')) return
+	let message = document.createElement('div');
+	message.id = 'end-game-message';
+	let p = document.createElement('p');
+	p.innerText = 'Все ваши животные вымерли, игра закончилась. Чтобы начась заново, обновите страницу.';
+	message.append(p);
+	let cancel = document.createElement('button')
+	cancel.innerText = 'Закрыть';
+	cancel.onclick = () =>  document.getElementById('end-game-message').style.display = 'none';
+	message.append(cancel)
+	if (!pauseActive) changePause();
+	document.body.append(message);
+}

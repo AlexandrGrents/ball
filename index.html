@@ -42,13 +42,18 @@
 			<option value="40">40 деревьев</option>
 			<option value="50">50 деревьев</option>
 		</select>
+		<select id="complexity">
+			<option value="75">Высокая сложность</option>
+			<option value="200">Средняя сложность</option>
+			<option value="500">Низкая сложность</option>
+		</select>
 		<button id="pause"><img src="images/pause-solid.svg"></button>
 		<br><br>
 		<input type="checkbox" id="show-sectors"><label for="show-sectors">Показать секторы</label>
 		<input type="checkbox" id="show-view-ranges"><label for="show-view-ranges">Показать радиус обзора</label>
 		<br><br>
 		<h5>Лимит популяции</h5>
-		<input id="trees-limit" type="range" min="100" max="5000" value="1000" step="100"><label for="limit">Макс. растений <b id="trees-limit-value">1000</b> [&#8712; (100 - 5000)]</label>
+		<input id="trees-limit" type="range" min="20" max="1000" value="100" step="20"><label for="limit">Макс. растений <b id="trees-limit-value">100</b> [&#8712; (20 - 1000)]</label>
 		<br>
 		<input id="animals-limit" type="range" min="5" max="250" value="15" step="5"><label for="limit">Макс. животных 	<b id="animals-limit-value">15</b> [&#8712; (5 - 250)]</label>
 		<br><br>

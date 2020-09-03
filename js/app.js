@@ -60,6 +60,7 @@ class Application
 		this.updateCount = 0;
 
 		this.addClicker = (pos) => console.log('add clicker on', {x: pos.x, y:pos.y})
+		this.onZeroAnimals = () => console.log('zero animals now!');
 	}
 
 	addScore()
@@ -227,6 +228,7 @@ class Application
 	}
 	update()
 	{
+		if (this.gatherers.size + this.hunters.size == 0) this.onZeroAnimals()
 		this.updateCount++;
 		this.movingBalls()
 		this.updateLogger()
