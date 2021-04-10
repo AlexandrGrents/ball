@@ -3,6 +3,8 @@
 
 [Посмотреть можно тут](https://alexandrgrents.github.io/evolution-simulator/)
 
+[Сервер на heroku](http://evo-simulator.herokuapp.com/)
+
 <h5>Коротко</h5>
 <p>Создаётся 10 <strong>собирателей</strong> (синий шарик), по 5 особей каждого пола, а также 100 <strong>растений</strong> (зеленые шарики).
 Есть также <strong>хищник</strong> (красный шарик) и <strong>останки</strong> (болотные шарики).
