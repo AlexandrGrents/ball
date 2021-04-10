@@ -13,4 +13,9 @@ module.exports = {
         aggregateTimeout: 600,
         poll: true
     },
+    devServer: {
+    	// contentBase: './index.html',
+    	compress: true,
+    	port: 9000,
+  },
 };
