@@ -1,152 +1,24 @@
-*{
+* {
 	padding: 0;
 	margin: 0;
-	box-sizing: border-box;
-	font-size: 16px;
 }
-li
-{
-	margin-left: 20px;
-}
-body
-{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-header
-{
-	width: 100%;
-	border-bottom: 1px solid #000;
-	display: flex;
-	align-items: center;
-	background-color: #eee;;
-}
-canvas { 
+
+#app {
 	cursor: pointer;
-	margin: 5px;
-	background: #eee; 
+	background: #eee;
 	border: 5px solid #000;
 }
 
-main
-{
+.container {
+	width: 100vw;
+	height: 100vh;
+
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-main>h4:first-child
-{
-	margin: 10px 0;
-	font-size: 25px;
-}
-#score
-{
-	font-size: 1em;
-}
-.active
-{
-	background: #faa;
-}
-.deactive
-{
-	background: #afa;
-}
-
-#github
-{
-	width: 64px;
-}
-#gitlink
-{
-	color:#000;
-	text-decoration: none;
-	display: flex;
-	align-items: center;
-	margin-right: 30px;
-
-}
-#controls, #info
-{
-	max-width: 60%;
-	background: #eee;
-	padding: 10px;
-	border: 2px solid #555;
-	margin-bottom: 20px;
-}
-#settings { width: 100%; }
-#settings>button
-{
-	background: #fff;
-	color: #fff;
-	border: none;
-	outline: none;
-}
-#settings>button>img
-{
-	width: 32px;
-	margin: 2px;
-}
-#settings>button>img:hover
-{
-	width: 36px;
-	margin: 0;
-}
-@media screen and (min-width:100px) and (max-width:800px) {
-	canvas
-	{
-		width: calc(100% - 10px);
-	}
-	#controls, #info
-	{
-		max-width: calc(100% - 10px);
-	}
-}
-
-#pause>img
-{
-	height: 1em;
-}
-#pause
-{
-	margin: 0;
-	padding: 0;
-}
-
-
-.dna
-{
-	position: absolute;
-	border-radius: 40px;
-	width: 40px;
-	height: 40px;
-	border: 2px solid #000;
-	background-image: url(images/dna-solid.svg);
-	background-size: 88%;
-	background-position: center;
-	background-color: #ff4f4f;
-}
-.dna:hover
-{
-	background-size: 98%;
-	border-width: 3px;
-}
-
-#end-game-message
-{
-	cursor: pointer;
-	width: 100%;
-	height: 100%;
-	padding: 0 50px;
-	position: absolute;
-	margin: auto;
-	display: flex;
-	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background: rgba(255, 140, 140, 0.5);
-	border: 3px solid #000;
 }
-#end-game-message>p{background: #fff; padding: 10px; border-radius: 20px}
-#end-game-message>button{width: 80px;}
+
+#win {
+	position: absolute;
+	margin: auto;
+}

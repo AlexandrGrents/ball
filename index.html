@@ -8,97 +8,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<header>
-		<h4><a id="gitlink" href="https://github.com/AlexandrGrents/ball"><img id="github" src="images/github.svg">GitHub</a></h4>
+	<div class="container">
+		<canvas id = "app"  width="780" height="520"></canvas>
 
-	</header>
-	<main>
-		<div id="score-container">
-			<h4>Счёт: <span id="score">0</span></h4>
-			<h4>Максимальный счёт: <span id="max-score">0</span></h4>
-		</div>
-		<canvas id="сanvas" width="780" height="520"></canvas>
-		<div id="settings">
-			<button id="controls-show"><img src="images/cog-solid.svg"></button>
-			<button id="info-show"><img src="images/info-circle-solid.svg"></button>
-		</div>
-	</main>
-	<section id="controls" hidden>
-		<p>До обновления леса: <span id="timer"></span> из <span id="total-time"></span></p>
-		<select id="speed">
-			<option value="1">1 обновление в секунду</option>
-			<option value="10">10 обновлений в секунду</option>
-			<option selected value="25">25 обновлений в секунду</option>
-			<option value="50">50 обновлений в секунду</option>
-			<option value="100">100 обновлений в секунду</option>
-			<option value="200">200 обновлений в секунду</option>
-		</select>
-		<select id="forest">
-			<option selected value="0">0 деревьев</option>
-			<option value="5">5 деревьев</option>
-			<option value="10">10 деревьев</option>
-			<option  value="20">20 деревьев</option>
-			<option value="30">30 деревьев</option>
-			<option value="40">40 деревьев</option>
-			<option value="50">50 деревьев</option>
-		</select>
-		<select id="complexity">
-			<option value="75">Высокая сложность</option>
-			<option value="200">Средняя сложность</option>
-			<option value="500">Низкая сложность</option>
-		</select>
-		<button id="pause"><img src="images/pause-solid.svg"></button>
-		<br><br>
-		<input type="checkbox" id="show-sectors"><label for="show-sectors">Показать секторы</label>
-		<input type="checkbox" id="show-view-ranges"><label for="show-view-ranges">Показать радиус обзора</label>
-		<br><br>
-		<h5>Лимит популяции</h5>
-		<input id="trees-limit" type="range" min="20" max="1000" value="100" step="20"><label for="limit">Макс. растений <b id="trees-limit-value">100</b> [&#8712; (20 - 1000)]</label>
-		<br>
-		<input id="animals-limit" type="range" min="5" max="250" value="15" step="5"><label for="limit">Макс. животных 	<b id="animals-limit-value">15</b> [&#8712; (5 - 250)]</label>
-		<br><br>
-		<button id="render-gatherers-graph" onclick="alert('функция в разработке')">Построить график популяции собирателей</button>
-		<button id="render-hunters-graph" 	onclick="alert('функция в разработке')">Построить график популяции охотников</button>
-	</section>
-	<section id="info" hidden>
-		<h5>Коротко</h5>
-		<p>Создаётся 10 <strong>собирателей</strong> (синий шарик), по 5 особей каждого пола, а также 100 <strong>растений</strong> (зеленые шарики).
-		Есть также <strong>хищник</strong> (красный шарик) и <strong>останки</strong> (болотные шарики).
-		Далее можно при помощи кнопок управления контролировать популяцию животных.</p>
-		<h6>Растение</h6>
-		<p>Создаётся с запасом питательности 50. За обновление прибавляется 1 ед. питательности.
-		Если накапливается 150 ед. питательности, растение даёт потомка:
-		в случайном месте рядом создаётся новое растение, а у растения-родителя отнимается 75 ед. питательности. </p>
-		<h6>Останки</h6>
-		<p>Появляются на месте смерти животных от голова или старости.
-		Запас питательности уменьшается на 1 ед. питательности за обновление. Если запас питательности опускается
-		до 0, останки превращаются в растение.</p>
-		<h6>Животные (Собиратели и Хищники)</h6>
-		<p>Имеют:</p>
-		<ul>
-		<li>пол (нижний шарик, мужской пол - голубой цвет,
-		женский пол - розовый цвет,
-		беременная особь женского пола - фиолетовый цвет)</li>
-		<li>индикатор готовности к размножению (верхний левый шарик)</li>
-		<li>индикатор голова (верхний правый шарик)</li>
-		</ul>
-		<p>Для размножения ищет особь противоположного пола, которая готова размножаться.
-		 После размножения у особи женского пола наступает период беременности,
-		 а после рождения период адоптации, когда особь не готова к размножению, даже если хватает энергии.  </p>
-		<h6>Собиратель</h6>
-		<p>Ищет растения в радиусе своего обзора. Питается только ими</p>
-		<h6>Хищник</h6>
-		<p>Ищет собирателей или останки в радиусе своего обзора. Питается только ими</p>
-		<h5>Функции</h5>
-		<ul>
-		<li>Можно менять количество обновлений в секунду</li>
-		<li>Можно установить количество новых растений</li>
-		<li>Можно добавить каждому собирателю 100 единиц энергии</li>
-		<li>Можно добавить одного собирателя со случайным полом</li>
-		<li>Можно добавить одного хищника со случайным полом</li>
-		</ul>
-	</section>
+		<button id = "win">Вы хотите победить?</button>
+	</div>
+
 	
-	<script type="module" src="js/script.js"></script>
+	<script src="dist/index_bundle.js" type="module"></script>
 </body>
 </html>

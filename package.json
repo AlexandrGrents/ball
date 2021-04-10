@@ -1,0 +1,31 @@
+{
+  "name": "evolution-simulator",
+  "version": "1.0.0",
+  "description": "[Посмотреть можно тут](https://alexandrgrents.github.io/evolution-simulator/)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --watch",
+    "start": "webpack serve --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexandrGrents/evolution-simulator.git"
+  },
+  "author": "Alexander Grents alx.grents@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexandrGrents/evolution-simulator/issues"
+  },
+  "homepage": "https://github.com/AlexandrGrents/evolution-simulator#readme",
+  "devDependencies": {
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.2.2",
+    "babel-preset-env": "^1.7.0",
+    "webpack": "^5.31.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
